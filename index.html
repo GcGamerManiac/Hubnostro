@@ -2,281 +2,563 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#11162b">
 <title>Game Hub — Lupus in Fabula, Impostore & Ruota</title>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#090b14}
-.screen{display:none;min-height:100vh;min-height:100dvh}
-.screen.active{display:block}
-#home{color:#fff;background:
-radial-gradient(circle at 15% 10%,rgba(89,101,242,.42),transparent 32%),
-radial-gradient(circle at 85% 85%,rgba(227,59,97,.30),transparent 32%),
-linear-gradient(145deg,#11172d,#090b14 70%);padding:calc(22px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom))}
-.home-inner{max-width:1120px;margin:auto;min-height:calc(100dvh - 50px);display:flex;flex-direction:column;justify-content:center}
-.brand{text-align:center;margin-bottom:42px}.brand-icon{font-size:70px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5))}
-.brand h1{font-size:clamp(42px,8vw,78px);letter-spacing:-3px;margin:5px 0;font-weight:900}
-.brand p{color:#aeb8d5;margin:0;font-size:17px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.card{min-height:350px;border-radius:30px;padding:32px;position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.035));box-shadow:0 25px 70px rgba(0,0,0,.3);transition:transform .25s,border-color .25s}
-.card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.35)}.card:active{transform:scale(.98)}
-.card .emoji{font-size:68px}.card h2{font-size:32px;margin:22px 0 8px}.card p{color:#c0c8dc;line-height:1.6;max-width:470px}
-.go{position:absolute;bottom:28px;left:32px;padding:13px 19px;border-radius:14px;font-weight:800}
-.lupus .go{background:linear-gradient(135deg,#b52649,#e33b61)}.wheel .go{background:linear-gradient(135deg,#4451e8,#5965f2)}
-.footer{text-align:center;color:#68728f;font-size:13px;margin-top:24px}
-.appbar{height:62px;position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));background:rgba(10,12,23,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#fff;border-bottom:1px solid rgba(255,255,255,.1)}
-.appbar.light{background:rgba(255,255,255,.94);color:#30374a;border-color:#e5e8f0}
-.back{border:0;border-radius:12px;padding:10px 14px;font-size:14px;font-weight:750;cursor:pointer;background:rgba(255,255,255,.12);color:inherit}.light .back{background:#eef0f6;color:#4f586e}
-.title{font-weight:900;font-size:17px}.spacer{width:150px}
-.frame{position:fixed;top:62px;left:0;width:100%;height:calc(100dvh - 62px);border:0;background:#fff}
-@media(max-width:700px){.cards{grid-template-columns:1fr}.card{min-height:270px;padding:26px}.card h2{font-size:29px}.brand{margin-bottom:28px}.brand-icon{font-size:58px}.spacer{width:110px}}
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #090b14; color: #ffffff; overflow-x: hidden;
+  }
+  
+  .screen { display: none; min-height: 100vh; padding: 20px; padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
+  .screen.active { display: block; }
+
+  /* HOME SCREEN */
+  #home {
+    background: radial-gradient(circle at 15% 10%, rgba(89,101,242,.35), transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(227,59,97,.25), transparent 40%),
+                linear-gradient(145deg, #11172d, #090b14);
+    text-align: center;
+  }
+  .home-title { font-size: 2.2rem; font-weight: 800; margin-top: 15px; margin-bottom: 5px; background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .home-sub { color: #94a3b8; font-size: 0.95rem; margin-bottom: 30px; }
+  
+  .grid-apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+  .app-card {
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px; padding: 25px 20px; text-align: left; cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    backdrop-filter: blur(10px);
+  }
+  .app-card:active { transform: scale(0.98); }
+  .app-card:hover { border-color: rgba(99, 102, 241, 0.5); background: rgba(255, 255, 255, 0.08); }
+  .app-icon { font-size: 2.5rem; margin-bottom: 12px; display: inline-block; }
+  .app-card h2 { margin: 0 0 8px 0; font-size: 1.4rem; color: #fff; }
+  .app-card p { margin: 0; color: #94a3b8; font-size: 0.88rem; line-height: 1.4; }
+
+  /* COMMON UI COMPONENTS */
+  .app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .btn-back { background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 10px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+  .app-header-title { font-size: 1.3rem; font-weight: 700; }
+
+  .container { max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 20px; border-radius: 20px; }
+  
+  .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+  .input-field {
+    flex: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 16px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none;
+  }
+  .input-field:focus { border-color: #6366f1; }
+  
+  .btn {
+    background: #6366f1; color: white; border: none; padding: 12px 20px;
+    border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;
+  }
+  .btn:active { opacity: 0.85; }
+  .btn-danger { background: #ef4444; }
+  .btn-success { background: #10b981; }
+  .btn-full { width: 100%; margin-top: 15px; padding: 14px; font-size: 1.05rem; }
+
+  /* PLAYER LIST */
+  .player-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 40px; }
+  .player-tag {
+    background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4);
+    color: #e0e7ff; padding: 8px 14px; border-radius: 20px; font-size: 0.9rem;
+    display: flex; align-items: center; gap: 8px; animation: fadeIn 0.2s ease;
+  }
+  .player-tag .remove-btn { cursor: pointer; opacity: 0.7; font-weight: bold; }
+  .player-tag .remove-btn:hover { opacity: 1; color: #f87171; }
+
+  /* WHEEL STYLE */
+  #wheel-container { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  canvas { max-width: 100%; height: auto; border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .pointer { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #ef4444; margin-bottom: -10px; z-index: 10; }
+
+  /* SECRET REVEAL CARD */
+  .reveal-card {
+    background: #1e293b; border-radius: 16px; padding: 30px; text-align: center;
+    min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    border: 2px dashed rgba(255,255,255,0.2); margin-top: 20px; cursor: pointer;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<section id="home" class="screen active">
-<div class="home-inner">
-<div class="brand"><div class="brand-icon">🎮</div><h1>GAME HUB</h1><p>Tre esperienze, un'unica applicazione.</p></div>
-<div class="cards">
-<div class="card lupus" onclick="openApp('lupus')"><div class="emoji">🐺🌕</div><h2>Lupus in Fabula</h2><p>Organizza i giocatori, assegna i ruoli, salva le lobby e gestisci la partita come narratore.</p><div class="go">Gioca a Lupus →</div></div>
-<div class="card impostor" onclick="openApp('impostor')"><div class="emoji">🕵️‍♂️🕶️</div><h2>L'Impostore</h2><p>Scopri la parola segreta, trova gli impostori e aggiungi anche Mr. X.</p><div class="go" style="background:linear-gradient(135deg,#7c4dff,#a56bff)">Gioca all'Impostore →</div></div><div class="card wheel" onclick="openApp('wheel')"><div class="emoji">🎡✨</div><h2>Ruota Casuale</h2><p>Inserisci le opzioni, personalizza il giro e lascia che la ruota scelga casualmente il vincitore.</p><div class="go">Apri la ruota →</div></div>
+<div id="home" class="screen active">
+  <div class="home-title">🎮 Game Hub</div>
+  <div class="home-sub">Seleziona un gioco per iniziare la serata!</div>
+
+  <div class="grid-apps">
+    <div class="app-card" onclick="openApp('lupus')">
+      <span class="app-icon">🐺</span>
+      <h2>Lupus in Fabula</h2>
+      <p>Assegna segretamente i ruoli e scopri chi sono i lupi prima che sia troppo tardi.</p>
+    </div>
+
+    <div class="app-card" onclick="openApp('impostore')">
+      <span class="app-icon">🕵️</span>
+      <h2>L'Impostore</h2>
+      <p>Trova il giocatore che non conosce la parola segreta senza farti scoprire.</p>
+    </div>
+
+    <div class="app-card" onclick="openApp('wheel')">
+      <span class="app-icon">🎡</span>
+      <h2>Ruota delle Decisioni</h2>
+      <p>Inserisci i nomi o le opzioni e lascia scegliere al destino!</p>
+    </div>
+  </div>
 </div>
-<div class="footer">Ottimizzato per Desktop • Android • iPhone • Safari</div>
+
+<div id="lupus" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goHomeConfirm()">← Home</button>
+    <div class="app-header-title">🐺 Lupus in Fabula</div>
+    <div></div>
+  </div>
+
+  <div class="container">
+    <h3>Aggiungi Giocatori</h3>
+    <div class="input-group">
+      <input type="text" id="lupus-input" class="input-field" placeholder="Nome giocatore..." onkeydown="if(event.key==='Enter') addPlayer('lupus')">
+      <button class="btn" onclick="addPlayer('lupus')">Aggiungi</button>
+    </div>
+
+    <div id="lupus-players" class="player-list"></div>
+
+    <div id="lupus-controls" style="display:none;">
+      <button class="btn btn-success btn-full" onclick="startLupusGame()">Distribuisci Ruoli Segreti 🎭</button>
+    </div>
+
+    <div id="lupus-reveal-zone" style="display:none;">
+      <h3 id="lupus-turn-text" style="text-align: center;"></h3>
+      <div class="reveal-card" onclick="toggleLupusRole()">
+        <span id="lupus-role-content" style="font-size: 1.2rem; font-weight: bold;">Tocca per mostrare il ruolo</span>
+      </div>
+      <button class="btn btn-full" style="margin-top:20px;" onclick="nextLupusPlayer()">Prossimo Giocatore ➔</button>
+    </div>
+  </div>
 </div>
-</section>
 
-<section id="lupus" class="screen">
-<div class="appbar"><button class="back" onclick="goHomeConfirm()">← Torna indietro</button><div class="title">🐺 Lupus in Fabula</div><div class="spacer"></div></div>
-<iframe id="lupusFrame" class="frame" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;it&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,viewport-fit=cover&quot;&gt;
-&lt;title&gt;Lupus in Fabula Premium&lt;/title&gt;
-&lt;script src=&quot;https://cdn.jsdelivr.net/npm/sweetalert2@11&quot;&gt;&lt;/script&gt;
-&lt;style&gt;
-:root{--bg:#090a10;--card:#161822;--line:#303548;--red:#b52649;--accent:#e33b61;--text:#f5f5f7;--muted:#9ca3b5}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#302038,#090a10 50%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Arial,sans-serif}
-.app{max-width:720px;margin:auto;padding:16px}.hidden{display:none!important}.hero{text-align:center;padding:25px 10px}.hero h1{margin:5px;font-size:32px}.accent{color:var(--accent)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}.title{font-weight:800;font-size:17px;margin-bottom:12px}.row{display:flex;gap:8px}.input{width:100%;padding:13px;border-radius:12px;border:1px solid #34394b;background:#090a10;color:white;font-size:16px}
-.btn{border:0;border-radius:12px;padding:13px 16px;background:linear-gradient(135deg,var(--red),var(--accent));color:#fff;font-weight:800}.secondary{background:#303548}.green{background:#167653}.danger{background:#702b38}.full{width:100%;margin-top:10px}
-.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.player,.masterItem{display:flex;align-items:center;gap:10px;padding:10px;background:#0e1017;border:1px solid #292e3e;border-radius:15px}.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;background:#292e3e;display:grid;place-items:center;font-size:21px}.pinfo{flex:1}.pname{font-weight:800}.small{font-size:12px;color:var(--muted)}
-.roles{display:grid;grid-template-columns:1fr 1fr;gap:8px}.role{position:relative;padding:11px;background:#0e1017;border:1px solid #292e3e;border-radius:14px;display:flex;align-items:center;gap:7px}.info{margin-left:auto;border:0;border-radius:50%;width:27px;height:27px;background:#303548;color:white}.tip{display:none;position:absolute;bottom:105%;left:0;right:0;z-index:5;background:#282d3d;border:1px solid #59617a;border-radius:10px;padding:10px;font-size:12px}.role.show .tip{display:block}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#0b0d13;border-radius:12px;text-align:center;padding:12px}.stat b{display:block;font-size:22px}.valid{color:#53e09e}.invalid{color:#ff7187}
-.fullscreen{min-height:100vh;display:grid;place-items:center;text-align:center;padding:20px;background:radial-gradient(circle,#321a29,#07080c 70%)}.revealcard{max-width:450px;width:100%;padding:28px;border-radius:26px;background:#191923}.big{font-size:60px}.roleName{font-size:32px;font-weight:900;margin:12px}.desc{color:#c5c7d0;line-height:1.6}
-.phase{padding:15px;border-radius:17px;background:#17192a;border:1px solid #49365b}.narrator{margin:12px 0;padding:13px;background:#10131d;border-left:4px solid #7c4dff;border-radius:10px}
-@media(max-width:500px){.roles{grid-template-columns:1fr}.row{flex-direction:column}.stats{grid-template-columns:1fr 1fr}}
-&lt;/style&gt;&lt;style&gt;html,body{min-height:100%;padding-bottom:env(safe-area-inset-bottom)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
-&lt;div id=&quot;setup&quot; class=&quot;app&quot;&gt;&lt;div class=&quot;hero&quot;&gt;🐺&lt;h1&gt;LUPUS &lt;span class=&quot;accent&quot;&gt;IN FABULA&lt;/span&gt;&lt;/h1&gt;&lt;div class=&quot;small&quot;&gt;Game Master • Preparazione partita&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;title&quot;&gt;👥 Partecipanti&lt;/div&gt;&lt;div class=&quot;row&quot;&gt;&lt;input id=&quot;playerName&quot; class=&quot;input&quot; placeholder=&quot;Nome giocatore&quot;&gt;&lt;button class=&quot;btn&quot; onclick=&quot;addPlayer()&quot;&gt;Aggiungi&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;playersList&quot; class=&quot;list&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;title&quot;&gt;🐺 Numero Lupi&lt;/div&gt;&lt;input id=&quot;wolves&quot; class=&quot;input&quot; type=&quot;number&quot; min=&quot;0&quot; value=&quot;2&quot; oninput=&quot;update()&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;title&quot;&gt;✨ Ruoli &lt;button class=&quot;btn secondary&quot; style=&quot;float:right;padding:8px&quot; onclick=&quot;createRole()&quot;&gt;＋ Ruolo&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;small&quot;&gt;Tocca ⓘ per i dettagli&lt;/div&gt;&lt;div id=&quot;roles&quot; class=&quot;roles&quot; style=&quot;margin-top:12px&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;stats&quot;&gt;&lt;div class=&quot;stat&quot;&gt;Giocatori&lt;b id=&quot;sp&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;Ruoli&lt;b id=&quot;sr&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;Contadini&lt;b id=&quot;sv&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;validation&quot; style=&quot;text-align:center;margin:12px&quot;&gt;&lt;/div&gt;&lt;button id=&quot;startBtn&quot; class=&quot;btn full&quot; disabled onclick=&quot;askLobby()&quot;&gt;🌕 Inizia partita&lt;/button&gt;&lt;/div&gt;
-&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;title&quot;&gt;🏠 Lobby salvate&lt;/div&gt;&lt;div id=&quot;lobbies&quot; class=&quot;list&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div id=&quot;pass&quot; class=&quot;fullscreen hidden&quot;&gt;&lt;div&gt;&lt;div class=&quot;big&quot;&gt;🌕&lt;/div&gt;&lt;div class=&quot;small&quot;&gt;Passa il dispositivo a&lt;/div&gt;&lt;h1 id=&quot;passName&quot;&gt;&lt;/h1&gt;&lt;button class=&quot;btn&quot; onclick=&quot;showRole()&quot;&gt;👁️ Mostra il mio ruolo&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div id=&quot;reveal&quot; class=&quot;fullscreen hidden&quot;&gt;&lt;div class=&quot;revealcard&quot;&gt;&lt;div id=&quot;rIcon&quot; class=&quot;big&quot;&gt;&lt;/div&gt;&lt;div id=&quot;rName&quot; class=&quot;roleName&quot;&gt;&lt;/div&gt;&lt;div id=&quot;rDesc&quot; class=&quot;desc&quot;&gt;&lt;/div&gt;&lt;button class=&quot;btn secondary full&quot; onclick=&quot;nextPlayer()&quot;&gt;✓ Ho visto il mio ruolo&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div id=&quot;master&quot; class=&quot;app hidden&quot;&gt;&lt;div class=&quot;hero&quot;&gt;&lt;h1&gt;🎭 IL &lt;span class=&quot;accent&quot;&gt;NARRATORE&lt;/span&gt;&lt;/h1&gt;&lt;div class=&quot;small&quot;&gt;Controllo della partita&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;phase&quot;&gt;&lt;div class=&quot;small&quot;&gt;FASE ATTUALE&lt;/div&gt;&lt;b id=&quot;phaseName&quot;&gt;☀️ Giorno&lt;/b&gt;&lt;div class=&quot;row&quot; style=&quot;margin-top:10px&quot;&gt;&lt;button class=&quot;btn secondary&quot; onclick=&quot;phase(&#x27;☀️ Giorno&#x27;)&quot;&gt;Giorno&lt;/button&gt;&lt;button class=&quot;btn&quot; onclick=&quot;phase(&#x27;🌙 Notte&#x27;)&quot;&gt;Notte&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;narrator&quot; class=&quot;narrator&quot;&gt;💬 Il villaggio discute e cerca i Lupi.&lt;/div&gt;&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;stats&quot;&gt;&lt;div class=&quot;stat&quot;&gt;Vivi&lt;b id=&quot;alive&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;Morti&lt;b id=&quot;dead&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;Totale&lt;b id=&quot;tot&quot;&gt;0&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;masterList&quot; class=&quot;list&quot;&gt;&lt;/div&gt;&lt;button class=&quot;btn full secondary&quot; onclick=&quot;newGame()&quot;&gt;↻ Nuova partita&lt;/button&gt;&lt;/div&gt;
-&lt;script&gt;
-const base=[[&quot;Veggente&quot;,&quot;🔮&quot;,&quot;Ogni notte riceve informazioni su un giocatore.&quot;],[&quot;Meretrice&quot;,&quot;💋&quot;,&quot;Ruolo speciale con azione notturna.&quot;],[&quot;Guardia&quot;,&quot;🛡️&quot;,&quot;Può proteggere un giocatore durante la notte.&quot;],[&quot;Cacciatore&quot;,&quot;🏹&quot;,&quot;Quando eliminato può influenzare un&#x27;altra eliminazione.&quot;],[&quot;Indovino&quot;,&quot;👁️&quot;,&quot;Possiede capacità investigative.&quot;],[&quot;Medium&quot;,&quot;👻&quot;,&quot;Può ottenere informazioni sui giocatori eliminati.&quot;],[&quot;Indemoniato&quot;,&quot;😈&quot;,&quot;Ha un obiettivo collegato ai Lupi.&quot;],[&quot;Gufo&quot;,&quot;🦉&quot;,&quot;Ruolo speciale con azione notturna.&quot;],[&quot;Assassino&quot;,&quot;🗡️&quot;,&quot;Personaggio offensivo speciale.&quot;],[&quot;Avvocato&quot;,&quot;⚖️&quot;,&quot;Influenza protezioni o decisioni.&quot;],[&quot;Angelo Custode&quot;,&quot;👼&quot;,&quot;Ruolo protettivo.&quot;],[&quot;Matto&quot;,&quot;🤪&quot;,&quot;Ha condizioni di gioco differenti.&quot;],[&quot;Demone&quot;,&quot;👹&quot;,&quot;Personaggio con poteri speciali.&quot;],[&quot;Zombie&quot;,&quot;🧟&quot;,&quot;Modifica la gestione della morte.&quot;],[&quot;Scemo del Villaggio&quot;,&quot;🤡&quot;,&quot;Ruolo speciale del villaggio.&quot;],[&quot;Cappuccetto Rosso&quot;,&quot;🧺&quot;,&quot;Personaggio con interazioni dedicate.&quot;],[&quot;Censuratore&quot;,&quot;🤐&quot;,&quot;Può limitare azioni o comunicazioni.&quot;],[&quot;Carceriere&quot;,&quot;🔒&quot;,&quot;Può bloccare un giocatore.&quot;],[&quot;Romeo&quot;,&quot;❤️&quot;,&quot;Ruolo collegato a dinamiche di coppia.&quot;],[&quot;Giulietta&quot;,&quot;💘&quot;,&quot;Ruolo collegato a dinamiche di coppia.&quot;],[&quot;Duca&quot;,&quot;👑&quot;,&quot;Personaggio speciale.&quot;],[&quot;Duchessa&quot;,&quot;👸&quot;,&quot;Personaggio speciale.&quot;],[&quot;Scrutatore&quot;,&quot;🔍&quot;,&quot;Personaggio investigativo.&quot;],[&quot;Cieco&quot;,&quot;🦯&quot;,&quot;Ha informazioni differenti.&quot;],[&quot;Copiatore&quot;,&quot;📋&quot;,&quot;Può copiare caratteristiche previste.&quot;]];
-let players=JSON.parse(localStorage.getItem(&quot;lp&quot;)||&quot;[]&quot;),custom=JSON.parse(localStorage.getItem(&quot;lr&quot;)||&quot;[]&quot;),game=[],cur=0;
-const all=()=&gt;[...base,...custom];const esc=s=&gt;{let d=document.createElement(&quot;div&quot;);d.textContent=s;return d.innerHTML};
-const photoDB={db:null,async open(){if(this.db)return this.db;return this.db=await new Promise((res,rej)=>{let r=indexedDB.open('gamehub_photos',1);r.onupgradeneeded=()=>r.result.createObjectStore('photos');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},async set(k,v){let d=await this.open();return new Promise((res,rej)=>{let t=d.transaction('photos','readwrite');t.objectStore('photos').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error)})},async get(k){let d=await this.open();return new Promise((res,rej)=>{let t=d.transaction('photos','readonly').objectStore('photos').get(k);t.onsuccess=()=>res(t.result||'');t.onerror=()=>rej(t.error)})}};
-function persist(){localStorage.setItem(&quot;lp&quot;,JSON.stringify(players.map(p=>({...p,photo:''})));localStorage.setItem(&quot;lr&quot;,JSON.stringify(custom))}
-async function loadPhotos(){for(let i=0;i<players.length;i++){let key='lupus_'+players[i].id;if(players[i].id)players[i].photo=await photoDB.get(key)}renderPlayers()}
-async function compressPhoto(file){return new Promise((res,rej)=>{let u=URL.createObjectURL(file),im=new Image();im.onload=()=>{let max=640,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.78))};im.onerror=rej;im.src=u})}
-function renderPlayers(){playersList.innerHTML=players.map((p,i)=&gt;`&lt;div class=&quot;player&quot;&gt;${p.photo?`&lt;img class=&quot;avatar&quot; src=&quot;${p.photo}&quot;&gt;`:&#x27;&lt;div class=&quot;avatar&quot;&gt;👤&lt;/div&gt;&#x27;}&lt;div class=&quot;pinfo&quot;&gt;&lt;div class=&quot;pname&quot;&gt;${esc(p.name)}&lt;/div&gt;&lt;div class=&quot;small&quot;&gt;${p.photo?&quot;Foto aggiunta&quot;:&quot;Nessuna foto&quot;}&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;btn secondary&quot; onclick=&quot;photo(${i})&quot;&gt;📷&lt;/button&gt;&lt;button class=&quot;btn danger&quot; onclick=&quot;removePlayer(${i})&quot;&gt;✕&lt;/button&gt;&lt;/div&gt;`).join(&quot;&quot;)}
-function addPlayer(){let n=playerName.value.trim();if(!n)return;players.push({id:crypto.randomUUID(),name:n,photo:&quot;&quot;});playerName.value=&quot;&quot;;persist();renderPlayers();update()}
-async function removePlayer(i){let id=players[i].id;players.splice(i,1);if(id){let d=await photoDB.open();d.transaction('photos','readwrite').objectStore('photos').delete('lupus_'+id)}persist();renderPlayers();update()}
-async function photo(i){try{let x=await Swal.fire({title:&quot;Foto giocatore&quot;,text:&quot;Scegli fotocamera o galleria&quot;,showCancelButton:true,showDenyButton:true,confirmButtonText:&quot;📷 Fotocamera&quot;,denyButtonText:&quot;🖼️ Galleria&quot;,cancelButtonText:&quot;Annulla&quot;,theme:&quot;dark&quot;});if(x.isDismissed)return;let inp=document.createElement(&quot;input&quot;);inp.type=&quot;file&quot;;inp.accept=&quot;image/*&quot;;if(x.isConfirmed)inp.capture=&quot;environment&quot;;inp.onchange=async e=>{try{let f=e.target.files&&e.target.files[0];if(!f)return;Swal.fire({title:&quot;Caricamento foto...&quot;,allowOutsideClick:false,didOpen:()=>Swal.showLoading(),theme:&quot;dark&quot;});let data=await compressPhoto(f);if(!players[i].id)players[i].id=crypto.randomUUID();players[i].photo=data;await photoDB.set('lupus_'+players[i].id,data);persist();renderPlayers();Swal.close()}catch(err){console.error(err);Swal.fire(&quot;Errore foto&quot;,&quot;Impossibile salvare la foto: &quot;+err.message,&quot;error&quot;)}};inp.click()}catch(err){console.error(err);Swal.fire(&quot;Errore&quot;,&quot;Impossibile aprire la selezione foto.&quot;,&quot;error&quot;)}}
-function renderRoles(){roles.innerHTML=all().map(r=&gt;`&lt;label class=&quot;role&quot;&gt;&lt;input type=&quot;checkbox&quot; value=&quot;${esc(r[0])}&quot; onchange=&quot;update()&quot;&gt;&lt;span&gt;${r[1]} &lt;b&gt;${esc(r[0])}&lt;/b&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;info&quot; onclick=&quot;this.closest(&#x27;.role&#x27;).classList.toggle(&#x27;show&#x27;)&quot;&gt;ⓘ&lt;/button&gt;&lt;div class=&quot;tip&quot;&gt;&lt;b&gt;${esc(r[0])}&lt;/b&gt;&lt;br&gt;${esc(r[2])}&lt;/div&gt;&lt;/label&gt;`).join(&quot;&quot;)}
-async function createRole(){let x=await Swal.fire({title:&quot;✨ Nuovo ruolo&quot;,html:&#x27;&lt;input id=&quot;n&quot; class=&quot;swal2-input&quot; placeholder=&quot;Nome&quot;&gt;&lt;input id=&quot;i&quot; class=&quot;swal2-input&quot; placeholder=&quot;Emoji&quot; value=&quot;✨&quot;&gt;&lt;textarea id=&quot;d&quot; class=&quot;swal2-textarea&quot; placeholder=&quot;Cosa fa?&quot;&gt;&lt;/textarea&gt;&#x27;,showCancelButton:true,theme:&quot;dark&quot;,preConfirm:()=&gt;[n.value.trim(),i.value.trim()||&quot;✨&quot;,d.value.trim()]});if(x.isConfirmed&amp;&amp;x.value[0]&amp;&amp;x.value[2]){custom.push(x.value);persist();renderRoles();update()}}
-function update(){let w=+wolves.value||0,s=document.querySelectorAll(&quot;#roles input:checked&quot;).length,m=w+s,v=Math.max(0,players.length-m),ok=players.length&amp;&amp;m&lt;=players.length;sp.textContent=players.length;sr.textContent=m;sv.textContent=v;validation.innerHTML=ok?&#x27;&lt;span class=&quot;valid&quot;&gt;✓ Configurazione pronta&lt;/span&gt;&#x27;:&#x27;&lt;span class=&quot;invalid&quot;&gt;Aggiungi giocatori o riduci i ruoli&lt;/span&gt;&#x27;;startBtn.disabled=!ok}
-async function askLobby(){let x=await Swal.fire({title:&quot;🌕 Inizia partita&quot;,text:&quot;Inserisci il nome della lobby&quot;,input:&quot;text&quot;,showCancelButton:true,confirmButtonText:&quot;Salva e inizia&quot;,theme:&quot;dark&quot;,inputValidator:v=&gt;!v&amp;&amp;&quot;Inserisci un nome&quot;});if(x.isConfirmed){saveLobby(x.value);startGame()}}
-function snapshot(){return{players:JSON.parse(JSON.stringify(players)),wolves:+wolves.value||0,selected:[...document.querySelectorAll(&quot;#roles input:checked&quot;)].map(x=&gt;x.value)}}
-function saveLobby(name){let l=JSON.parse(localStorage.getItem(&quot;ll&quot;)||&quot;[]&quot;);l=l.filter(x=&gt;x.name!==name);l.push({id:Date.now(),name,s:snapshot()});localStorage.setItem(&quot;ll&quot;,JSON.stringify(l));renderLobbies()}
-function renderLobbies(){let l=JSON.parse(localStorage.getItem(&quot;ll&quot;)||&quot;[]&quot;);lobbies.innerHTML=l.map(x=&gt;`&lt;div class=&quot;player&quot;&gt;&lt;div class=&quot;pinfo&quot;&gt;&lt;b&gt;🏠 ${esc(x.name)}&lt;/b&gt;&lt;div class=&quot;small&quot;&gt;${x.s.players.length} giocatori&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;btn secondary&quot; onclick=&quot;loadLobby(${x.id})&quot;&gt;Apri&lt;/button&gt;&lt;button class=&quot;btn danger&quot; onclick=&quot;deleteLobby(${x.id})&quot;&gt;🗑️&lt;/button&gt;&lt;/div&gt;`).join(&quot;&quot;)||&#x27;&lt;div class=&quot;small&quot;&gt;Nessuna lobby salvata.&lt;/div&gt;&#x27;}
-function loadLobby(id){let x=JSON.parse(localStorage.getItem(&quot;ll&quot;)||&quot;[]&quot;).find(x=&gt;x.id===id);players=x.s.players;wolves.value=x.s.wolves;persist();renderPlayers();renderRoles();setTimeout(()=&gt;{x.s.selected.forEach(v=&gt;{let e=[...document.querySelectorAll(&quot;#roles input&quot;)].find(e=&gt;e.value===v);if(e)e.checked=true});update()},0)}
-async function deleteLobby(id){let r=await Swal.fire({title:&quot;Eliminare questa lobby?&quot;,icon:&quot;warning&quot;,showCancelButton:true,theme:&quot;dark&quot;});if(r.isConfirmed){localStorage.setItem(&quot;ll&quot;,JSON.stringify(JSON.parse(localStorage.getItem(&quot;ll&quot;)||&quot;[]&quot;).filter(x=&gt;x.id!==id)));renderLobbies()}}
-function startGame(){let rr=[];for(let i=0;i&lt;(+wolves.value||0);i++)rr.push([&quot;Lupo Mannaro&quot;,&quot;🐺&quot;,&quot;Durante la notte agisce con gli altri Lupi.&quot;]);[...document.querySelectorAll(&quot;#roles input:checked&quot;)].forEach(x=&gt;rr.push(all().find(r=&gt;r[0]===x.value)));while(rr.length&lt;players.length)rr.push([&quot;Contadino&quot;,&quot;🌾&quot;,&quot;Aiuta il villaggio a scoprire i Lupi.&quot;]);rr.sort(()=&gt;Math.random()-.5);game=players.map((p,i)=&gt;({...p,role:rr[i],alive:true}));cur=0;setup.classList.add(&quot;hidden&quot;);pass.classList.remove(&quot;hidden&quot;);passName.textContent=game[0].name}
-function showRole(){let r=game[cur].role;pass.classList.add(&quot;hidden&quot;);reveal.classList.remove(&quot;hidden&quot;);rIcon.textContent=r[1];rName.textContent=r[0];rDesc.textContent=r[2]}
-function nextPlayer(){cur++;if(cur&lt;game.length){reveal.classList.add(&quot;hidden&quot;);pass.classList.remove(&quot;hidden&quot;);passName.textContent=game[cur].name}else{reveal.classList.add(&quot;hidden&quot;);master.classList.remove(&quot;hidden&quot;);renderMaster()}}
-function renderMaster(){let a=game.filter(x=&gt;x.alive).length;alive.textContent=a;dead.textContent=game.length-a;tot.textContent=game.length;masterList.innerHTML=game.map((p,i)=&gt;`&lt;div class=&quot;masterItem ${p.alive?&quot;&quot;:&quot;dead&quot;}&quot;&gt;${p.photo?`&lt;img class=&quot;avatar&quot; src=&quot;${p.photo}&quot;&gt;`:&#x27;&lt;div class=&quot;avatar&quot;&gt;👤&lt;/div&gt;&#x27;}&lt;div class=&quot;pinfo&quot;&gt;&lt;div class=&quot;pname&quot;&gt;${esc(p.name)}&lt;/div&gt;&lt;div class=&quot;small&quot;&gt;${p.role[1]} ${esc(p.role[0])}&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;btn ${p.alive?&quot;green&quot;:&quot;danger&quot;}&quot; onclick=&quot;game[${i}].alive=!game[${i}].alive;renderMaster()&quot;&gt;${p.alive?&quot;✓ Vivo&quot;:&quot;☠ Morto&quot;}&lt;/button&gt;&lt;/div&gt;`).join(&quot;&quot;)}
-function phase(p){phaseName.textContent=p;narrator.textContent=p.includes(&quot;Notte&quot;)?&quot;🌙 Il villaggio dorme. Guida ora i ruoli notturni.&quot;:&quot;💬 Il villaggio discute e cerca i Lupi.&quot;}
-async function newGame(){let r=await Swal.fire({title:&quot;Nuova partita?&quot;,showCancelButton:true,theme:&quot;dark&quot;});if(r.isConfirmed){master.classList.add(&quot;hidden&quot;);setup.classList.remove(&quot;hidden&quot;)}}
-players=players.map(p=>({...p,id:p.id||crypto.randomUUID(),photo:p.photo||''}));renderPlayers();renderRoles();renderLobbies();update();loadPhotos();
-&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
-</section>
+<div id="impostore" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goHomeConfirm()">← Home</button>
+    <div class="app-header-title">🕵️ L'Impostore</div>
+    <div></div>
+  </div>
 
+  <div class="container">
+    <h3>Giocatori</h3>
+    <div class="input-group">
+      <input type="text" id="impostore-input" class="input-field" placeholder="Nome giocatore..." onkeydown="if(event.key==='Enter') addPlayer('impostore')">
+      <button class="btn" onclick="addPlayer('impostore')">Aggiungi</button>
+    </div>
 
-<section id="impostor" class="screen">
-<div class="appbar"><button class="back" onclick="goHomeConfirm()">← Torna indietro</button><div class="title">🕵️ L'Impostore</div><div class="spacer"></div></div>
-<iframe class="frame" srcdoc="<!DOCTYPE html><html lang='it'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script><style>body{margin:0;background:#090a10;color:#fff;font-family:Arial,sans-serif}.app{max-width:720px;margin:auto;padding:18px}.card{background:#161822;border:1px solid #303548;border-radius:20px;padding:16px;margin:12px 0}.input,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #34394b;background:#090a10;color:#fff;font-size:16px}.btn{border:0;border-radius:12px;padding:12px 15px;background:#7c4dff;color:#fff;font-weight:800;margin-top:8px}.row{display:flex;gap:8px}.list div{padding:10px;border-bottom:1px solid #303548}.hidden{display:none}.full{width:100%}</style></head><body><div id='setup' class='app'><h1>🕵️ L'Impostore</h1><div class='card'><b>Giocatori</b><div class='row'><input id='name' class='input' placeholder='Nome giocatore'><button class='btn' onclick='add()'>Aggiungi</button></div><button class='btn' onclick='importNames()'>📁 Carica nomi da file</button><div id='players' class='list'></div></div><div class='card'><b>Numero impostori</b><input id='imps' class='input' type='number' min='1' value='1'><label><input id='mrx' type='checkbox'> Aggiungi Mr. X</label></div><div class='card'><b>Parole segrete</b><textarea id='words' rows='8' placeholder='Una parola per riga'></textarea><button class='btn' onclick='addWords()'>➕ Aggiungi parole</button><button class='btn' onclick='importWords()'>📁 Carica parole da file</button></div><button class='btn full' onclick='start()'>▶ Inizia partita</button></div><div id='pass' class='app hidden'><div class='card' style='text-align:center'><h2 id='who'></h2><button class='btn' onclick='reveal()'>👁️ Mostra</button></div></div><div id='show' class='app hidden'><div class='card' style='text-align:center'><h1 id='role'></h1><h2 id='word'></h2><button class='btn' onclick='next()'>✓ Ho visto</button></div></div><script>let p=JSON.parse(localStorage.getItem('imp_players')||'[]'),g=[],i=0,secret='';const esc=x=>x.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));function save(){localStorage.setItem('imp_players',JSON.stringify(p));localStorage.setItem('imp_words',words.value)}function render(){players.innerHTML=p.map((x,j)=>'<div>'+esc(x)+' <button onclick="p.splice('+j+',1);save();render()">✕</button></div>').join('');save()}function add(){if(name.value.trim()){p.push(name.value.trim());name.value='';render()}}async function importText(cb){let inp=document.createElement('input');inp.type='file';inp.accept='.txt,.csv';inp.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>cb(r.result);r.readAsText(f)};inp.click()}function importNames(){importText(t=>{p.push(...t.split(/\r?\n|,/).map(x=>x.trim()).filter(Boolean));render()})}function importWords(){importText(t=>{words.value+=(words.value?'\n':'')+t;save()})}function addWords(){Swal.fire({title:'Aggiungi parole',input:'textarea',showCancelButton:true}).then(r=>{if(r.isConfirmed&&r.value){words.value+=(words.value?'\n':'')+r.value;save()}})}function start(){let n=+imps.value||1,w=words.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(p.length<n+(mrx.checked?1:0)+1||!w.length)return Swal.fire('Configurazione non valida','Servono più giocatori e almeno una parola','error');secret=w[Math.floor(Math.random()*w.length)];let a=[...p].sort(()=>Math.random()-.5);g=a.map((name,j)=>({name,type:j<n?'Impostore':(mrx.checked&&j===n?'Mr. X':'Cittadino')}));i=0;setup.classList.add('hidden');pass.classList.remove('hidden');who.textContent=g[0].name}function reveal(){pass.classList.add('hidden');show.classList.remove('hidden');let x=g[i];role.textContent=x.type;word.textContent=x.type==='Mr. X'?'❓ Nessun suggerimento':(x.type==='Impostore'?'💡 Suggerimento: '+secret.charAt(0)+'…':'🔐 Parola: '+secret)}function next(){i++;if(i<g.length){show.classList.add('hidden');pass.classList.remove('hidden');who.textContent=g[i].name}else Swal.fire('Partita pronta!','Ora iniziate a parlare e scoprite gli impostori.','success')}words.value=localStorage.getItem('imp_words')||'';render();window.addEventListener('beforeunload',e=>{e.preventDefault();e.returnValue=''})</script></body></html>"></iframe>
-</section>
+    <div id="impostore-players" class="player-list"></div>
 
-<section id="wheel" class="screen">
-<div class="appbar light"><button class="back" onclick="goHomeConfirm()">← Torna indietro</button><div class="title">🎡 Ruota Casuale</div><div class="spacer"></div></div>
-<iframe id="wheelFrame" class="frame" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;it&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, viewport-fit=cover&quot;&gt;
-&lt;title&gt;SpinWheel — Ruota Casuale&lt;/title&gt;
-&lt;style&gt;
-:root{--bg:#f4f6fb;--card:#fff;--text:#252b3a;--muted:#77809a;--primary:#5965f2;--border:#e6e9f2}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
-header{height:64px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:18px;position:relative;z-index:5}
-.logo{font-size:22px;font-weight:800;color:#4451e8;display:flex;align-items:center;gap:9px}.logo span{font-size:28px}
-nav{display:flex;gap:8px;margin-left:20px}nav button,.icon-btn{border:0;background:transparent;padding:10px 13px;border-radius:10px;color:#5f6780;font-size:14px;cursor:pointer}nav button:hover,.icon-btn:hover{background:#f0f2f8}
-.header-right{margin-left:auto;display:flex;gap:8px}.save{background:#5965f2!important;color:#fff!important}
-.app{height:calc(100vh - 64px);display:grid;grid-template-columns:1fr 370px}
-.main{position:relative;display:flex;align-items:center;justify-content:center;padding:28px;min-width:0}
-.wheel-wrap{width:min(72vh,700px);height:min(72vh,700px);position:relative;display:flex;align-items:center;justify-content:center}
-.pointer{position:absolute;top:-7px;left:50%;transform:translateX(-50%);z-index:3;width:0;height:0;border-left:28px solid transparent;border-right:28px solid transparent;border-top:52px solid #293042;filter:drop-shadow(0 4px 4px #0004)}
-.wheel-shadow{position:absolute;width:100%;aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:0 22px 55px #27325b2e}
-canvas{width:100%;height:100%;position:relative;border-radius:50%;cursor:pointer;filter:drop-shadow(0 10px 12px #0002)}
-.center{position:absolute;width:112px;height:112px;border-radius:50%;background:#fff;border:7px solid #eceff7;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2;box-shadow:0 5px 18px #0002;cursor:pointer;font-weight:800;color:#4a556d;letter-spacing:.5px;transition:.2s}
-.center:hover{transform:scale(1.05)}.center .play{font-size:25px;color:#5965f2;line-height:1}
-.side{background:#fff;border-left:1px solid var(--border);padding:18px;display:flex;flex-direction:column;gap:14px;overflow:auto}
-.panel-title{display:flex;align-items:center;justify-content:space-between}.panel-title h2{font-size:17px;margin:0}.count{font-size:12px;color:var(--muted);background:#f1f3f8;padding:5px 9px;border-radius:99px}
-textarea{width:100%;height:240px;resize:none;border:1px solid var(--border);border-radius:12px;padding:14px;font:15px/1.6 inherit;color:var(--text);outline:none;background:#fbfcff}textarea:focus{border-color:#7b85ff;box-shadow:0 0 0 3px #5965f21c}
-.toolbar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.toolbar button,.action{border:1px solid var(--border);background:#fff;padding:10px;border-radius:10px;cursor:pointer;font-weight:600;color:#5b6478}.toolbar button:hover,.action:hover{background:#f5f6fb}
-.settings{border-top:1px solid var(--border);padding-top:15px}.settings h3{font-size:14px;margin:0 0 12px}.setting-row{display:flex;align-items:center;justify-content:space-between;margin:12px 0;font-size:14px}.setting-row input[type=range]{width:145px}.switch{width:43px;height:24px;appearance:none;background:#dce0ea;border-radius:20px;position:relative;cursor:pointer}.switch:checked{background:#5965f2}.switch:before{content:&quot;&quot;;position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s}.switch:checked:before{left:22px}
-.spin-btn{margin-top:auto;background:#5965f2;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px #5965f240}.spin-btn:hover{background:#4c57dc}.spin-btn:disabled{opacity:.6;cursor:not-allowed}
-.modal{position:fixed;inset:0;background:#1720338a;display:none;align-items:center;justify-content:center;z-index:20;padding:20px}.modal.show{display:flex}.modal-card{background:#fff;border-radius:22px;padding:32px;max-width:420px;width:100%;text-align:center;box-shadow:0 30px 80px #0004;animation:pop .35s ease}.winner-icon{font-size:58px}.modal h1{margin:10px 0 6px;font-size:25px}.winner{font-size:32px;font-weight:900;color:#5965f2;word-break:break-word}.modal p{color:#77809a}.modal-actions{display:flex;gap:10px;margin-top:25px}.modal-actions button{flex:1;padding:13px;border-radius:11px;border:1px solid var(--border);font-weight:700;cursor:pointer}.again{background:#5965f2!important;color:#fff;border-color:#5965f2!important}
-@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(100px);background:#252b3a;color:#fff;padding:12px 18px;border-radius:12px;transition:.35s;z-index:30}.toast.show{transform:translateX(-50%) translateY(0)}
-.confetti{position:fixed;width:9px;height:14px;top:-20px;z-index:25;pointer-events:none}
-@media(max-width:850px){body{overflow:auto}.app{height:auto;min-height:calc(100vh - 64px);grid-template-columns:1fr}.main{min-height:62vh;padding:35px 18px}.wheel-wrap{width:min(88vw,560px);height:min(88vw,560px)}.side{border-left:0;border-top:1px solid var(--border);min-height:500px}.pointer{border-left-width:22px;border-right-width:22px;border-top-width:43px}.center{width:95px;height:95px}header nav{display:none}.header-right .icon-btn{display:none}}
-&lt;/style&gt;
-&lt;style&gt;html,body{min-height:100%;padding-bottom:env(safe-area-inset-bottom)}@media(max-width:850px){body{overflow:auto!important}}&lt;/style&gt;&lt;/head&gt;
-&lt;body&gt;
-&lt;header&gt;
-  &lt;div class=&quot;logo&quot;&gt;&lt;span&gt;🎡&lt;/span&gt; SpinWheel&lt;/div&gt;
-  &lt;nav&gt;&lt;button&gt;Nuova ruota&lt;/button&gt;&lt;button id=&quot;fullscreenBtn&quot;&gt;⛶ Schermo intero&lt;/button&gt;&lt;/nav&gt;
-  &lt;div class=&quot;header-right&quot;&gt;&lt;button class=&quot;icon-btn&quot; id=&quot;themeBtn&quot;&gt;☀️&lt;/button&gt;&lt;button class=&quot;icon-btn&quot; id=&quot;resetBtn&quot;&gt;↺ Reset&lt;/button&gt;&lt;button class=&quot;icon-btn save&quot; id=&quot;exportBtn&quot;&gt;↓ Esporta&lt;/button&gt;&lt;/div&gt;
-&lt;/header&gt;
+    <div style="margin-bottom: 15px;">
+      <label style="font-size:0.9rem; color:#94a3b8; display:block; margin-bottom:5px;">Argomento Parola Segreta:</label>
+      <input type="text" id="impostore-topic" class="input-field" style="width:100%;" placeholder="Es. Cibo, Oggetti, Luoghi (opzionale)">
+    </div>
 
-&lt;div class=&quot;app&quot;&gt;
-  &lt;main class=&quot;main&quot;&gt;
-    &lt;div class=&quot;wheel-wrap&quot;&gt;
-      &lt;div class=&quot;pointer&quot;&gt;&lt;/div&gt;&lt;div class=&quot;wheel-shadow&quot;&gt;&lt;/div&gt;
-      &lt;canvas id=&quot;wheel&quot; width=&quot;900&quot; height=&quot;900&quot;&gt;&lt;/canvas&gt;
-      &lt;button class=&quot;center&quot; id=&quot;centerSpin&quot;&gt;&lt;span class=&quot;play&quot;&gt;▶&lt;/span&gt;&lt;span&gt;GIRA&lt;/span&gt;&lt;/button&gt;
-    &lt;/div&gt;
-  &lt;/main&gt;
+    <div id="impostore-controls" style="display:none;">
+      <button class="btn btn-success btn-full" onclick="startImpostoreGame()">Avvia Partita 🚀</button>
+    </div>
 
-  &lt;aside class=&quot;side&quot;&gt;
-    &lt;div class=&quot;panel-title&quot;&gt;&lt;h2&gt;Voci della ruota&lt;/h2&gt;&lt;span class=&quot;count&quot; id=&quot;count&quot;&gt;0 voci&lt;/span&gt;&lt;/div&gt;
-    &lt;textarea id=&quot;entries&quot; placeholder=&quot;Inserisci un nome per riga...&quot;&gt;&lt;/textarea&gt;
-    &lt;div class=&quot;toolbar&quot;&gt;
-      &lt;button id=&quot;shuffleBtn&quot;&gt;🔀 Mescola&lt;/button&gt;
-      &lt;button id=&quot;clearBtn&quot;&gt;🗑 Pulisci&lt;/button&gt;
-      &lt;button id=&quot;exampleBtn&quot;&gt;✨ Esempio&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;settings&quot;&gt;
-      &lt;h3&gt;⚙️ Impostazioni&lt;/h3&gt;
-      &lt;div class=&quot;setting-row&quot;&gt;&lt;span&gt;Durata giro&lt;/span&gt;&lt;label&gt;&lt;input type=&quot;range&quot; id=&quot;duration&quot; min=&quot;2&quot; max=&quot;12&quot; value=&quot;6&quot;&gt; &lt;b id=&quot;durationLabel&quot;&gt;6s&lt;/b&gt;&lt;/label&gt;&lt;/div&gt;
-      &lt;div class=&quot;setting-row&quot;&gt;&lt;span&gt;Rimuovi il vincitore&lt;/span&gt;&lt;input class=&quot;switch&quot; id=&quot;removeWinner&quot; type=&quot;checkbox&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;setting-row&quot;&gt;&lt;span&gt;Suono durante il giro&lt;/span&gt;&lt;input class=&quot;switch&quot; id=&quot;sound&quot; type=&quot;checkbox&quot; checked&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;button class=&quot;spin-btn&quot; id=&quot;spinBtn&quot;&gt;▶ GIRA LA RUOTA&lt;/button&gt;
-  &lt;/aside&gt;
-&lt;/div&gt;
+    <div id="impostore-reveal-zone" style="display:none;">
+      <h3 id="impostore-turn-text" style="text-align: center;"></h3>
+      <div class="reveal-card" onclick="toggleImpostoreRole()">
+        <span id="impostore-role-content" style="font-size: 1.2rem; font-weight: bold;">Tocca per vedere la tua parola</span>
+      </div>
+      <button class="btn btn-full" style="margin-top:20px;" onclick="nextImpostorePlayer()">Prossimo Giocatore ➔</button>
+    </div>
+  </div>
+</div>
 
-&lt;div class=&quot;modal&quot; id=&quot;modal&quot;&gt;&lt;div class=&quot;modal-card&quot;&gt;
-  &lt;div class=&quot;winner-icon&quot;&gt;🎉&lt;/div&gt;&lt;h1&gt;Il vincitore è...&lt;/h1&gt;&lt;div class=&quot;winner&quot; id=&quot;winnerName&quot;&gt;&lt;/div&gt;&lt;p&gt;La ruota ha scelto casualmente!&lt;/p&gt;
-  &lt;div class=&quot;modal-actions&quot;&gt;&lt;button id=&quot;closeModal&quot;&gt;Chiudi&lt;/button&gt;&lt;button class=&quot;again&quot; id=&quot;againBtn&quot;&gt;↻ Gira ancora&lt;/button&gt;&lt;/div&gt;
-&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;toast&quot; id=&quot;toast&quot;&gt;&lt;/div&gt;
+<div id="wheel" class="screen">
+  <div class="app-header">
+    <button class="btn-back" onclick="goHomeConfirm()">← Home</button>
+    <div class="app-header-title">🎡 Ruota della Fortuna</div>
+    <div></div>
+  </div>
 
-&lt;script&gt;
-const canvas=document.getElementById(&#x27;wheel&#x27;),ctx=canvas.getContext(&#x27;2d&#x27;);
-const entriesEl=document.getElementById(&#x27;entries&#x27;),countEl=document.getElementById(&#x27;count&#x27;);
-let entries=JSON.parse(localStorage.getItem(&#x27;spinwheel_entries&#x27;)||&#x27;[&quot;Andrea&quot;,&quot;Marco&quot;,&quot;Giulia&quot;,&quot;Francesca&quot;,&quot;Luca&quot;,&quot;Sofia&quot;,&quot;Matteo&quot;,&quot;Elena&quot;]&#x27;);
-let rotation=0,spinning=false;
-const palette=[&#x27;#ff5b6e&#x27;,&#x27;#ff9f43&#x27;,&#x27;#ffd93d&#x27;,&#x27;#3ddc97&#x27;,&#x27;#32c5ff&#x27;,&#x27;#6c63ff&#x27;,&#x27;#b56cff&#x27;,&#x27;#ff6bb5&#x27;,&#x27;#36d1b4&#x27;,&#x27;#ff7f50&#x27;,&#x27;#4facfe&#x27;,&#x27;#9b59b6&#x27;];
+  <div class="container">
+    <div class="input-group">
+      <input type="text" id="wheel-input" class="input-field" placeholder="Aggiungi opzione..." onkeydown="if(event.key==='Enter') addPlayer('wheel')">
+      <button class="btn" onclick="addPlayer('wheel')">Aggiungi</button>
+    </div>
 
-function syncTextarea(){entriesEl.value=entries.join(&#x27;\\n&#x27;);countEl.textContent=entries.length+&#x27; &#x27;+(entries.length===1?&#x27;voce&#x27;:&#x27;voci&#x27;);localStorage.setItem(&#x27;spinwheel_entries&#x27;,JSON.stringify(entries));draw();}
-function secureRandom(max){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%max}
-function draw(){
- const n=entries.length;ctx.clearRect(0,0,900,900);if(!n)return;
- const cx=450,cy=450,r=440,arc=Math.PI*2/n;
- for(let i=0;i&lt;n;i++){
-   const start=rotation+i*arc-Math.PI/2;
-   ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+arc);ctx.closePath();
-   ctx.fillStyle=palette[i%palette.length];ctx.fill();ctx.strokeStyle=&#x27;rgba(255,255,255,.75)&#x27;;ctx.lineWidth=3;ctx.stroke();
-   ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);ctx.textAlign=&#x27;right&#x27;;
-   ctx.fillStyle=&#x27;#fff&#x27;;ctx.font=`700 ${Math.min(32,Math.max(16,430/n))}px Arial`;
-   let text=entries[i];if(text.length&gt;18)text=text.slice(0,17)+&#x27;…&#x27;;ctx.fillText(text,r-42,8);ctx.restore();
- }
- ctx.beginPath();ctx.arc(cx,cy,62,0,Math.PI*2);ctx.fillStyle=&#x27;#fff&#x27;;ctx.fill();
-}
-function updateEntries(){
- entries=entriesEl.value.split(&#x27;\\n&#x27;).map(x=&gt;x.trim()).filter(Boolean);syncTextarea();
-}
-entriesEl.addEventListener(&#x27;input&#x27;,updateEntries);
-function toast(msg){const t=document.getElementById(&#x27;toast&#x27;);t.textContent=msg;t.classList.add(&#x27;show&#x27;);setTimeout(()=&gt;t.classList.remove(&#x27;show&#x27;),2200)}
-function beep(freq=500,dur=.03){
- if(!document.getElementById(&#x27;sound&#x27;).checked)return;
- try{const ac=new (window.AudioContext||window.webkitAudioContext)(),o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;g.gain.value=.04;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+dur);o.stop(ac.currentTime+dur)}catch(e){}
-}
-function spin(){
- if(spinning)return;if(entries.length&lt;2){toast(&#x27;Inserisci almeno 2 voci&#x27;);return}
- spinning=true;document.getElementById(&#x27;spinBtn&#x27;).disabled=true;
- const winnerIndex=secureRandom(entries.length),n=entries.length,arc=360/n;
- const targetCenter=-(winnerIndex*arc+arc/2);
- const currentDeg=((rotation*180/Math.PI)%360+360)%360;
- const target=((targetCenter%360)+360)%360;
- const delta=((target-currentDeg)+360)%360;
- const extra=(7+secureRandom(5))*360;
- const start=rotation,end=rotation+(extra+delta)*Math.PI/180;
- const duration=+document.getElementById(&#x27;duration&#x27;).value*1000,startTime=performance.now();
- let lastTick=0;
- function animate(now){
-   const p=Math.min(1,(now-startTime)/duration),ease=1-Math.pow(1-p,4);
-   rotation=start+(end-start)*ease;draw();
-   if(now-lastTick&gt;90){beep(350+Math.random()*250,.025);lastTick=now}
-   if(p&lt;1)requestAnimationFrame(animate);else{
-     rotation=end;draw();spinning=false;document.getElementById(&#x27;spinBtn&#x27;).disabled=false;beep(800,.12);
-     setTimeout(()=&gt;showWinner(winnerIndex),350);
-   }
- }
- requestAnimationFrame(animate);
-}
-function showWinner(index){const winner=entries[index];document.getElementById(&#x27;winnerName&#x27;).textContent=winner;document.getElementById(&#x27;modal&#x27;).classList.add(&#x27;show&#x27;);confetti();if(document.getElementById(&#x27;removeWinner&#x27;).checked){entries.splice(index,1);syncTextarea();}}
-function confetti(){for(let i=0;i&lt;100;i++){const e=document.createElement(&#x27;i&#x27;);e.className=&#x27;confetti&#x27;;e.style.left=Math.random()*100+&#x27;vw&#x27;;e.style.background=palette[i%palette.length];e.style.transform=`rotate(${Math.random()*360}deg)`;document.body.appendChild(e);const d=900+Math.random()*1700;e.animate([{transform:e.style.transform,top:&#x27;-20px&#x27;},{transform:`translate(${(Math.random()-.5)*240}px,0) rotate(${Math.random()*1000}deg)`,top:&#x27;110vh&#x27;}],{duration:d,easing:&#x27;cubic-bezier(.2,.8,.4,1)&#x27;}).onfinish=()=&gt;e.remove()}}
-document.getElementById(&#x27;spinBtn&#x27;).onclick=spin;document.getElementById(&#x27;centerSpin&#x27;).onclick=spin;canvas.onclick=spin;
-document.getElementById(&#x27;duration&#x27;).oninput=e=&gt;document.getElementById(&#x27;durationLabel&#x27;).textContent=e.target.value+&#x27;s&#x27;;
-document.getElementById(&#x27;shuffleBtn&#x27;).onclick=()=&gt;{for(let i=entries.length-1;i&gt;0;i--){let j=secureRandom(i+1);[entries[i],entries[j]]=[entries[j],entries[i]]}syncTextarea();toast(&#x27;Voci mescolate!&#x27;)};
-document.getElementById(&#x27;clearBtn&#x27;).onclick=()=&gt;{if(confirm(&#x27;Vuoi eliminare tutte le voci?&#x27;)){entries=[];syncTextarea()}};
-document.getElementById(&#x27;exampleBtn&#x27;).onclick=()=&gt;{entries=[&#x27;Pizza 🍕&#x27;,&#x27;Sushi 🍣&#x27;,&#x27;Hamburger 🍔&#x27;,&#x27;Pasta 🍝&#x27;,&#x27;Kebab 🥙&#x27;,&#x27;Insalata 🥗&#x27;];syncTextarea()};
-document.getElementById(&#x27;closeModal&#x27;).onclick=()=&gt;document.getElementById(&#x27;modal&#x27;).classList.remove(&#x27;show&#x27;);
-document.getElementById(&#x27;againBtn&#x27;).onclick=()=&gt;{document.getElementById(&#x27;modal&#x27;).classList.remove(&#x27;show&#x27;);setTimeout(spin,250)};
-document.getElementById(&#x27;resetBtn&#x27;).onclick=()=&gt;{rotation=0;draw();toast(&#x27;Ruota reimpostata&#x27;)};
-document.getElementById(&#x27;exportBtn&#x27;).onclick=()=&gt;{const blob=new Blob([entries.join(&#x27;\\n&#x27;)],{type:&#x27;text/plain&#x27;}),a=document.createElement(&#x27;a&#x27;);a.href=URL.createObjectURL(blob);a.download=&#x27;spinwheel-voci.txt&#x27;;a.click();URL.revokeObjectURL(a.href)};
-document.getElementById(&#x27;fullscreenBtn&#x27;).onclick=()=&gt;{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()};
-document.getElementById(&#x27;themeBtn&#x27;).onclick=()=&gt;{document.body.classList.toggle(&#x27;dark&#x27;);const dark=document.body.classList.contains(&#x27;dark&#x27;);document.documentElement.style.setProperty(&#x27;--bg&#x27;,dark?&#x27;#171923&#x27;:&#x27;#f4f6fb&#x27;);document.documentElement.style.setProperty(&#x27;--card&#x27;,dark?&#x27;#202330&#x27;:&#x27;#fff&#x27;);document.documentElement.style.setProperty(&#x27;--text&#x27;,dark?&#x27;#eef0f7&#x27;:&#x27;#252b3a&#x27;);document.documentElement.style.setProperty(&#x27;--border&#x27;,dark?&#x27;#323747&#x27;:&#x27;#e6e9f2&#x27;);document.querySelector(&#x27;.side&#x27;).style.background=dark?&#x27;#202330&#x27;:&#x27;#fff&#x27;;document.querySelector(&#x27;header&#x27;).style.background=dark?&#x27;#202330&#x27;:&#x27;#fff&#x27;;document.getElementById(&#x27;themeBtn&#x27;).textContent=dark?&#x27;🌙&#x27;:&#x27;☀️&#x27;};
-window.addEventListener(&#x27;keydown&#x27;,e=&gt;{if(e.code===&#x27;Space&#x27;&amp;&amp;e.target.tagName!==&#x27;TEXTAREA&#x27;){e.preventDefault();spin()}});
-syncTextarea();
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;"></iframe>
-</section>
+    <div id="wheel-players" class="player-list"></div>
+
+    <div id="wheel-container" style="margin-top:20px;">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas" width="320" height="320"></canvas>
+      <button class="btn btn-success btn-full" style="margin-top:20px;" onclick="spinWheel()">Gira la Ruota! 🎰</button>
+    </div>
+  </div>
+</div>
 
 <script>
-function openApp(id){
- document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.body.style.background=id==='wheel'?'#f4f6fb':'#090a10';
- window.scrollTo(0,0);
-}
-async function goHomeConfirm(){const r=await Swal.fire({title:'Tornare indietro?',text:'Sei sicuro di voler abbandonare questa schermata?',icon:'warning',showCancelButton:true,confirmButtonText:'Sì, torna indietro',cancelButtonText:'Annulla'});if(r.isConfirmed)goHome()}
-function goHome(){
- document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
- document.getElementById('home').classList.add('active');
- document.body.style.background='#090b14';
- window.scrollTo(0,0);
-}
-history.replaceState({hub:true},'');history.pushState({app:true},'');window.addEventListener('popstate',async()=>{history.pushState({app:true},'');await goHomeConfirm()});window.addEventListener('beforeunload',e=>{e.preventDefault();e.returnValue='';return ''});
+  // STATE MANAGEMENT
+  const state = {
+    lupus: { players: [], roles: [], currentIndex: 0, showing: false },
+    impostore: { players: [], word: "", impostorIndex: -1, currentIndex: 0, showing: false },
+    wheel: { items: ["Opzione 1", "Opzione 2", "Opzione 3"], spinning: false, currentAngle: 0 }
+  };
+
+  const wordsDatabase = ["Pizza", "Colosseo", "Astronauta", "Smartphone", "Chitarra", "Gelato", "Gatto", "Aereo", "Spiaggia", "Orologio"];
+
+  // INITIALIZATION
+  window.addEventListener('DOMContentLoaded', () => {
+    // Intercetta la chiusura o il refresh della pagina
+    window.addEventListener('beforeunload', (e) => {
+      e.preventDefault();
+      e.returnValue = ''; // Messaggio standard del browser per confermare il refresh/chiusura
+    });
+
+    // Gestione tasto indietro del browser (History Popstate)
+    history.pushState({ page: 'home' }, '', '');
+    window.addEventListener('popstate', async (e) => {
+      const activeScreen = document.querySelector('.screen.active');
+      if (activeScreen && activeScreen.id !== 'home') {
+        history.pushState({ page: 'game' }, '', '');
+        const r = await Swal.fire({
+          title: 'Vuoi uscire?',
+          text: 'Se torni indietro abbandonerai la schermata di gioco attuale.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sì, esci',
+          cancelButtonText: 'Rimani',
+          confirmButtonColor: '#ef4444',
+          cancelButtonColor: '#6366f1'
+        });
+        if (r.isConfirmed) {
+          goHome();
+        }
+      }
+    });
+
+    drawWheel();
+  });
+
+  // NAVIGATION
+  function openApp(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+    if(id === 'wheel') drawWheel();
+  }
+
+  async function goHomeConfirm() {
+    const r = await Swal.fire({
+      title: 'Tornare indietro?',
+      text: 'Sei sicuro di voler tornare alla schermata principale?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sì, torna alla Home',
+      cancelButtonText: 'Annulla',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6366f1'
+    });
+    if (r.isConfirmed) {
+      goHome();
+    }
+  }
+
+  function goHome() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('home').classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  // ADD PLAYER / OPTION MANAGEMENT WITH ERROR HANDLING
+  function addPlayer(app) {
+    const input = document.getElementById(`${app}-input`);
+    const val = input.value.trim();
+
+    // 1. Errore: Campo vuoto
+    if (!val) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Nome vuoto',
+        text: 'Inserisci un nome o un’opzione valida!',
+        timer: 2000,
+        showConfirmButton: false
+      });
+      return;
+    }
+
+    const list = app === 'wheel' ? state.wheel.items : state[app].players;
+
+    // 2. Errore: Nome Duplicato (Case Insensitive)
+    const isDuplicate = list.some(item => item.toLowerCase() === val.toLowerCase());
+    if (isDuplicate) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Giocatore presente',
+        text: `"${val}" è già stato inserito nella lista!`,
+        timer: 2200,
+        showConfirmButton: false
+      });
+      return;
+    }
+
+    // Aggiungi elemento
+    list.push(val);
+    input.value = '';
+    input.focus();
+
+    renderPlayers(app);
+
+    if (app === 'wheel') {
+      drawWheel();
+    }
+  }
+
+  function removePlayer(app, index) {
+    const list = app === 'wheel' ? state.wheel.items : state[app].players;
+    list.splice(index, 1);
+    renderPlayers(app);
+    if (app === 'wheel') drawWheel();
+  }
+
+  function renderPlayers(app) {
+    const container = document.getElementById(`${app}-players`);
+    const list = app === 'wheel' ? state.wheel.items : state[app].players;
+    
+    container.innerHTML = list.map((p, i) => `
+      <div class="player-tag">
+        <span>${p}</span>
+        <span class="remove-btn" onclick="removePlayer('${app}', ${i})">✕</span>
+      </div>
+    `).join('');
+
+    const controls = document.getElementById(`${app}-controls`);
+    if(controls) {
+      controls.style.display = list.length >= 3 ? 'block' : 'none';
+    }
+  }
+
+  // ---------------- LUPUS IN FABULA LOGIC ----------------
+  function startLupusGame() {
+    const players = state.lupus.players;
+    if (players.length < 3) {
+      Swal.fire('Attenzione', 'Servono almeno 3 giocatori per giocare a Lupus!', 'info');
+      return;
+    }
+
+    let roles = ['🐺 Lupo'];
+    if (players.length >= 4) roles.push('🔮 Veggente');
+    if (players.length >= 5) roles.push('🛡️ Guardiano');
+    while (roles.length < players.length) {
+      roles.push('👨 Villico');
+    }
+
+    // Shuffle roles
+    state.lupus.roles = roles.sort(() => Math.random() - 0.5);
+    state.lupus.currentIndex = 0;
+    state.lupus.showing = false;
+
+    document.getElementById('lupus-controls').style.display = 'none';
+    document.getElementById('lupus-reveal-zone').style.display = 'block';
+    updateLupusUI();
+  }
+
+  function updateLupusUI() {
+    const p = state.lupus.players[state.lupus.currentIndex];
+    document.getElementById('lupus-turn-text').textContent = `Passa il telefono a: ${p}`;
+    document.getElementById('lupus-role-content').textContent = 'Tocca per mostrare il ruolo';
+    state.lupus.showing = false;
+  }
+
+  function toggleLupusRole() {
+    const content = document.getElementById('lupus-role-content');
+    if (!state.lupus.showing) {
+      content.textContent = state.lupus.roles[state.lupus.currentIndex];
+      state.lupus.showing = true;
+    } else {
+      content.textContent = 'Tocca per mostrare il ruolo';
+      state.lupus.showing = false;
+    }
+  }
+
+  function nextLupusPlayer() {
+    if (state.lupus.currentIndex < state.lupus.players.length - 1) {
+      state.lupus.currentIndex++;
+      updateLupusUI();
+    } else {
+      Swal.fire({
+        title: 'Tutti i ruoli assegnati!',
+        text: 'La notte scende sulla città... Buona partita!',
+        icon: 'success'
+      });
+      document.getElementById('lupus-reveal-zone').style.display = 'none';
+      document.getElementById('lupus-controls').style.display = 'block';
+    }
+  }
+
+  // ---------------- IMPOSTORE LOGIC ----------------
+  function startImpostoreGame() {
+    const players = state.impostore.players;
+    if (players.length < 3) {
+      Swal.fire('Attenzione', 'Servono almeno 3 giocatori per l\'Impostore!', 'info');
+      return;
+    }
+
+    const topicInput = document.getElementById('impostore-topic').value.trim();
+    state.impostore.word = topicInput || wordsDatabase[Math.floor(Math.random() * wordsDatabase.length)];
+    state.impostore.impostorIndex = Math.floor(Math.random() * players.length);
+    state.impostore.currentIndex = 0;
+    state.impostore.showing = false;
+
+    document.getElementById('impostore-controls').style.display = 'none';
+    document.getElementById('impostore-reveal-zone').style.display = 'block';
+    updateImpostoreUI();
+  }
+
+  function updateImpostoreUI() {
+    const p = state.impostore.players[state.impostore.currentIndex];
+    document.getElementById('impostore-turn-text').textContent = `Passa il telefono a: ${p}`;
+    document.getElementById('impostore-role-content').textContent = 'Tocca per vedere la tua parola';
+    state.impostore.showing = false;
+  }
+
+  function toggleImpostoreRole() {
+    const content = document.getElementById('impostore-role-content');
+    if (!state.impostore.showing) {
+      if (state.impostore.currentIndex === state.impostore.impostorIndex) {
+        content.textContent = '🤫 SEI L\'IMPOSTORE!';
+        content.style.color = '#ef4444';
+      } else {
+        content.textContent = `📌 Parola Segreta: ${state.impostore.word}`;
+        content.style.color = '#10b981';
+      }
+      state.impostore.showing = true;
+    } else {
+      content.textContent = 'Tocca per vedere la tua parola';
+      content.style.color = '#ffffff';
+      state.impostore.showing = false;
+    }
+  }
+
+  function nextImpostorePlayer() {
+    if (state.impostore.currentIndex < state.impostore.players.length - 1) {
+      state.impostore.currentIndex++;
+      updateImpostoreUI();
+    } else {
+      Swal.fire({
+        title: 'Tutti hanno visto la parola!',
+        text: 'Iniziate a fare le domande e trovate l\'Impostore!',
+        icon: 'success'
+      });
+      document.getElementById('impostore-reveal-zone').style.display = 'none';
+      document.getElementById('impostore-controls').style.display = 'block';
+    }
+  }
+
+  // ---------------- RUOTA LOGIC ----------------
+  const colors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#ef4444'];
+
+  function drawWheel() {
+    const canvas = document.getElementById('wheelCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const items = state.wheel.items;
+    const numItems = items.length;
+    const radius = canvas.width / 2;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (numItems === 0) {
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.arc(radius, radius, radius - 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = '16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Aggiungi opzioni!', radius, radius);
+      return;
+    }
+
+    const sliceAngle = (2 * Math.PI) / numItems;
+
+    for (let i = 0; i < numItems; i++) {
+      const angle = state.wheel.currentAngle + i * sliceAngle;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.beginPath();
+      ctx.moveTo(radius, radius);
+      ctx.arc(radius, radius, radius - 5, angle, angle + sliceAngle);
+      ctx.lineTo(radius, radius);
+      ctx.fill();
+
+      // Text
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate(angle + sliceAngle / 2);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(items[i], radius - 20, 5);
+      ctx.restore();
+    }
+  }
+
+  function spinWheel() {
+    if (state.wheel.spinning) return;
+    if (state.wheel.items.length < 2) {
+      Swal.fire('Attenzione', 'Inserisci almeno 2 opzioni per girare la ruota!', 'info');
+      return;
+    }
+
+    state.wheel.spinning = true;
+    const spinAngle = Math.random() * 20 + 20; // numero di giri
+    let currentSpin = 0;
+
+    function animate() {
+      if (currentSpin < spinAngle) {
+        currentSpin += 0.2;
+        state.wheel.currentAngle += (spinAngle - currentSpin) * 0.015;
+        drawWheel();
+        requestAnimationFrame(animate);
+      } else {
+        state.wheel.spinning = false;
+        calculateWinner();
+      }
+    }
+    animate();
+  }
+
+  function calculateWinner() {
+    const items = state.wheel.items;
+    const numItems = items.length;
+    const sliceAngle = (2 * Math.PI) / numItems;
+    
+    // Normalizza angolo
+    let normalizedAngle = (2 * Math.PI - (state.wheel.currentAngle % (2 * Math.PI)) - Math.PI / 2) % (2 * Math.PI);
+    if (normalizedAngle < 0) normalizedAngle += 2 * Math.PI;
+
+    const winningIndex = Math.floor(normalizedAngle / sliceAngle);
+    const winner = items[winningIndex];
+
+    Swal.fire({
+      title: '🎉 Risultato!',
+      text: `Il destino ha scelto: ${winner}`,
+      icon: 'success',
+      confirmButtonText: 'Ottimo!'
+    });
+  }
+
+  // Renderizza la lista iniziale se c'è
+  renderPlayers('wheel');
 </script>
 </body>
 </html>
