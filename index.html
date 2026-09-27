@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ctext y=%2250%22 font-size=%2250%22%3E🎮%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#11162b">
-<title>Game Hub — Lupus in Fabula, Impostore & Ruota</title>
+<title>Game Hub — Lupus, Impostore, Yahtzee & Ruota</title>
 <!-- Aggiunto SweetAlert2 per la schermata principale -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
@@ -25,12 +25,12 @@ linear-gradient(145deg,#11172d,#090b14 70%);padding:calc(22px + env(safe-area-in
 .brand{text-align:center;margin-bottom:42px}.brand-icon{font-size:70px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5))}
 .brand h1{font-size:clamp(42px,8vw,78px);letter-spacing:-3px;margin:5px 0;font-weight:900}
 .brand p{color:#aeb8d5;margin:0;font-size:17px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
 .card{min-height:350px;border-radius:30px;padding:32px;position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.035));box-shadow:0 25px 70px rgba(0,0,0,.3);transition:transform .25s,border-color .25s}
 .card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.35)}.card:active{transform:scale(.98)}
 .card .emoji{font-size:68px}.card h2{font-size:32px;margin:22px 0 8px}.card p{color:#c0c8dc;line-height:1.6;max-width:470px}
 .go{position:absolute;bottom:28px;left:32px;padding:13px 19px;border-radius:14px;font-weight:800}
-.lupus .go{background:linear-gradient(135deg,#b52649,#e33b61)}.wheel .go{background:linear-gradient(135deg,#4451e8,#5965f2)}
+.lupus .go{background:linear-gradient(135deg,#b52649,#e33b61)}.yatzee .go{background:linear-gradient(135deg,#0b8f72,#19c99e)}.wheel .go{background:linear-gradient(135deg,#4451e8,#5965f2)}
 .footer{text-align:center;color:#68728f;font-size:13px;margin-top:24px}
 .appbar{height:62px;position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));background:rgba(10,12,23,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#fff;border-bottom:1px solid rgba(255,255,255,.1)}
 .appbar.light{background:rgba(255,255,255,.94);color:#30374a;border-color:#e5e8f0}
@@ -44,10 +44,10 @@ linear-gradient(145deg,#11172d,#090b14 70%);padding:calc(22px + env(safe-area-in
 
 <section id="home" class="screen active">
 <div class="home-inner">
-<div class="brand"><div class="brand-icon">🎮</div><h1>GAME HUB</h1><p>Tre esperienze, un'unica applicazione.</p></div>
+<div class="brand"><div class="brand-icon">🎮</div><h1>GAME HUB</h1><p>Quattro esperienze, un'unica applicazione.</p></div>
 <div class="cards">
 <div class="card lupus" onclick="openApp('lupus')"><div class="emoji">🐺🌕</div><h2>Lupus in Fabula</h2><p>Organizza i giocatori, assegna i ruoli, salva le lobby e gestisci la partita come narratore.</p><div class="go">Gioca a Lupus →</div></div>
-<div class="card impostor" onclick="openApp('impostor')"><div class="emoji">🕵️‍♂️🕶️</div><h2>L'Impostore</h2><p>Scopri la parola segreta, trova gli impostori e aggiungi anche Mr. X.</p><div class="go" style="background:linear-gradient(135deg,#7c4dff,#a56bff)">Gioca all'Impostore →</div></div><div class="card wheel" onclick="openApp('wheel')"><div class="emoji">🎡✨</div><h2>Ruota Casuale</h2><p>Inserisci le opzioni, personalizza il giro e lascia che la ruota scelga casualmente il vincitore.</p><div class="go">Apri la ruota →</div></div>
+<div class="card impostor" onclick="openApp('impostor')"><div class="emoji">🕵️‍♂️🕶️</div><h2>L'Impostore</h2><p>Scopri la parola segreta, trova gli impostori e aggiungi anche Mr. X.</p><div class="go" style="background:linear-gradient(135deg,#7c4dff,#a56bff)">Gioca all'Impostore →</div></div><div class="card yatzee" onclick="openApp('yatzee')"><div class="emoji">🎲🏆</div><h2>Yahtzee</h2><p>Lancia cinque dadi, conserva quelli che vuoi, cerca le combinazioni migliori e completa il tabellone prima degli avversari.</p><div class="go">Gioca a Yahtzee →</div></div><div class="card wheel" onclick="openApp('wheel')"><div class="emoji">🎡✨</div><h2>Ruota Casuale</h2><p>Inserisci le opzioni, personalizza il giro e lascia che la ruota scelga casualmente il vincitore.</p><div class="go">Apri la ruota →</div></div>
 </div>
 <div class="footer">Ottimizzato per Desktop • Android • iPhone • Safari</div>
 </div>
@@ -115,6 +115,340 @@ players=players.map(p=>({...p,id:p.id||crypto.randomUUID(),photo:p.photo||''}));
 <section id="impostor" class="screen">
 <div class="appbar"><button class="back" onclick="goHomeConfirm()">← Torna indietro</button><div class="title">🕵️ L'Impostore</div><div class="spacer"></div></div>
 <iframe class="frame" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;it&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,viewport-fit=cover&quot;&gt;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/sweetalert2@11&quot;&gt;&lt;/script&gt;&lt;style&gt;*{box-sizing:border-box}body{margin:0;background:#0b0c14;color:#fff;font-family:-apple-system,Arial}.app{max-width:700px;margin:auto;padding:16px 14px 35px}.card{background:#181a26;border:1px solid #33384d;border-radius:18px;padding:15px;margin:12px 0}.hero{text-align:center}.row{display:flex;gap:8px}.input,textarea{width:100%;padding:14px;border-radius:12px;border:1px solid #3b4055;background:#0d0f17;color:#fff;font-size:16px}.btn{border:0;border-radius:12px;padding:13px;background:#8357f5;color:#fff;font-weight:800}.secondary{background:#34394b}.danger{background:#803244}.full{width:100%;margin-top:8px}.player{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #303548}.player:last-child{border:0}.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;background:#303548;display:grid;place-items:center}.info{flex:1}.small{font-size:12px;color:#aeb5c9}.hidden{display:none!important}.reveal{min-height:90vh;display:grid;place-items:center;text-align:center}.big{font-size:52px}@media(max-width:520px){.row{flex-direction:column}.btn{min-height:48px}}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;setup&quot; class=&quot;app&quot;&gt;&lt;div class=&quot;hero&quot;&gt;&lt;div class=&quot;big&quot;&gt;🕵️‍♂️&lt;/div&gt;&lt;h1&gt;L&#x27;IMPOSTORE&lt;/h1&gt;&lt;div class=&quot;small&quot;&gt;I cittadini ricevono la parola giusta, gli impostori una parola simile.&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;card&quot;&gt;&lt;b&gt;👥 Giocatori&lt;/b&gt;&lt;div class=&quot;row&quot; style=&quot;margin-top:10px&quot;&gt;&lt;input id=&quot;name&quot; class=&quot;input&quot; placeholder=&quot;Nome giocatore&quot;&gt;&lt;button class=&quot;btn&quot; onclick=&quot;addPlayer()&quot;&gt;Aggiungi&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;players&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;card&quot;&gt;&lt;b&gt;🎭 Numero impostori&lt;/b&gt;&lt;input id=&quot;imps&quot; class=&quot;input&quot; type=&quot;number&quot; min=&quot;1&quot; value=&quot;1&quot; style=&quot;margin-top:10px&quot;&gt;&lt;label class=&quot;small&quot;&gt;&lt;input id=&quot;mrx&quot; type=&quot;checkbox&quot;&gt; Aggiungi Mr. X&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;card&quot;&gt;&lt;b&gt;🔐 Coppie di parole&lt;/b&gt;&lt;div class=&quot;small&quot;&gt;Formato: parola giusta | parola simile&lt;/div&gt;&lt;textarea id=&quot;words&quot; rows=&quot;8&quot;&gt;&lt;/textarea&gt;&lt;button class=&quot;btn secondary full&quot; onclick=&quot;loadExamples()&quot;&gt;✨ Carica 20 coppie&lt;/button&gt;&lt;/div&gt;&lt;button class=&quot;btn full&quot; onclick=&quot;startGame()&quot;&gt;▶ Inizia partita&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;pass&quot; class=&quot;app reveal hidden&quot;&gt;&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;big&quot;&gt;📱&lt;/div&gt;&lt;div class=&quot;small&quot;&gt;Passa il telefono a&lt;/div&gt;&lt;h2 id=&quot;who&quot;&gt;&lt;/h2&gt;&lt;button class=&quot;btn full&quot; onclick=&quot;reveal()&quot;&gt;👁️ Mostra&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;show&quot; class=&quot;app reveal hidden&quot;&gt;&lt;div class=&quot;card&quot;&gt;&lt;div id=&quot;icon&quot; class=&quot;big&quot;&gt;🕵️&lt;/div&gt;&lt;h2 id=&quot;role&quot;&gt;&lt;/h2&gt;&lt;div class=&quot;small&quot; id=&quot;label&quot;&gt;&lt;/div&gt;&lt;h1 id=&quot;word&quot;&gt;&lt;/h1&gt;&lt;button class=&quot;btn secondary full&quot; onclick=&quot;nextPlayer()&quot;&gt;✓ Ho visto&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;script&gt;const examples=[[&#x27;Pizza&#x27;,&#x27;Hamburger&#x27;],[&#x27;Mare&#x27;,&#x27;Spiaggia&#x27;],[&#x27;Cane&#x27;,&#x27;Lupo&#x27;],[&#x27;Gatto&#x27;,&#x27;Tigre&#x27;],[&#x27;Roma&#x27;,&#x27;Milano&#x27;],[&#x27;Caffè&#x27;,&#x27;Cappuccino&#x27;],[&#x27;Aereo&#x27;,&#x27;Treno&#x27;],[&#x27;Calcio&#x27;,&#x27;Basket&#x27;],[&#x27;Ferrari&#x27;,&#x27;Lamborghini&#x27;],[&#x27;iPhone&#x27;,&#x27;Android&#x27;],[&#x27;Gelato&#x27;,&#x27;Torta&#x27;],[&#x27;Spaghetti&#x27;,&#x27;Lasagna&#x27;],[&#x27;Discoteca&#x27;,&#x27;Concerto&#x27;],[&#x27;Montagna&#x27;,&#x27;Collina&#x27;],[&#x27;Scuola&#x27;,&#x27;Università&#x27;],[&#x27;Bicicletta&#x27;,&#x27;Moto&#x27;],[&#x27;Netflix&#x27;,&#x27;Cinema&#x27;],[&#x27;Hotel&#x27;,&#x27;Casa&#x27;],[&#x27;Sushi&#x27;,&#x27;Ristorante&#x27;],[&#x27;Estate&#x27;,&#x27;Primavera&#x27;]];let players=JSON.parse(localStorage.getItem(&#x27;imp_players_v3&#x27;)||&#x27;[]&#x27;),game=[],idx=0,pair;const $=id=&gt;document.getElementById(id);function save(){localStorage.setItem(&#x27;imp_players_v3&#x27;,JSON.stringify(players));localStorage.setItem(&#x27;imp_words_v3&#x27;,$(&#x27;words&#x27;).value)}function render(){ $(&#x27;players&#x27;).innerHTML=players.map((p,i)=&gt;`&lt;div class=&quot;player&quot;&gt;${p.photo?`&lt;img class=&quot;avatar&quot; src=&quot;${p.photo}&quot;&gt;`:&#x27;&lt;div class=&quot;avatar&quot;&gt;👤&lt;/div&gt;&#x27;}&lt;div class=&quot;info&quot;&gt;&lt;b&gt;${p.name}&lt;/b&gt;&lt;div class=&quot;small&quot;&gt;${p.photo?&#x27;Foto aggiunta&#x27;:&#x27;Nessuna foto&#x27;}&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;btn secondary&quot; onclick=&quot;addPhoto(${i})&quot;&gt;📷&lt;/button&gt;&lt;button class=&quot;btn danger&quot; onclick=&quot;players.splice(${i},1);render()&quot;&gt;✕&lt;/button&gt;&lt;/div&gt;`).join(&#x27;&#x27;);save()}function addPlayer(){let n=$(&#x27;name&#x27;).value.trim();if(!n)return Swal.fire(&#x27;Errore&#x27;,&#x27;Inserisci un nome&#x27;,&#x27;error&#x27;);if(players.some(x=&gt;x.name.toLowerCase()==n.toLowerCase()))return Swal.fire(&#x27;Attenzione&#x27;,&#x27;Giocatore già presente&#x27;,&#x27;warning&#x27;);players.push({name:n,photo:&#x27;&#x27;});$(&#x27;name&#x27;).value=&#x27;&#x27;;render()}function addPhoto(i){let x=document.createElement(&#x27;input&#x27;);x.type=&#x27;file&#x27;;x.accept=&#x27;image/*&#x27;;x.onchange=e=&gt;{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=&gt;{let im=new Image();im.onload=()=&gt;{let c=document.createElement(&#x27;canvas&#x27;),m=Math.min(1,500/Math.max(im.width,im.height));c.width=im.width*m;c.height=im.height*m;c.getContext(&#x27;2d&#x27;).drawImage(im,0,0,c.width,c.height);players[i].photo=c.toDataURL(&#x27;image/jpeg&#x27;,.72);render()};im.src=r.result};r.readAsDataURL(f)};x.click()}function loadExamples(){$(&#x27;words&#x27;).value=examples.map(x=&gt;x.join(&#x27; | &#x27;)).join(&#x27;\n&#x27;);save()}function pairs(){return $(&#x27;words&#x27;).value.split(/\n+/).map(x=&gt;x.split(&#x27;|&#x27;).map(y=&gt;y.trim())).filter(x=&gt;x.length&gt;1&amp;&amp;x[0]&amp;&amp;x[1])}function startGame(){let n=+$(&#x27;imps&#x27;).value||1,ps=pairs(),extra=$(&#x27;mrx&#x27;).checked?1:0;if(players.length&lt;n+extra+1||!ps.length)return Swal.fire(&#x27;Configurazione non valida&#x27;,&#x27;Servono più giocatori e almeno una coppia di parole&#x27;,&#x27;error&#x27;);pair=ps[Math.floor(Math.random()*ps.length)];game=[...players].sort(()=&gt;Math.random()-.5).map((p,i)=&gt;({...p,type:i&lt;n?&#x27;Impostore&#x27;:($(&#x27;mrx&#x27;).checked&amp;&amp;i===n?&#x27;Mr. X&#x27;:&#x27;Cittadino&#x27;)}));idx=0;$(&#x27;setup&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;pass&#x27;).classList.remove(&#x27;hidden&#x27;);$(&#x27;who&#x27;).textContent=game[0].name}function reveal(){let g=game[idx];$(&#x27;pass&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;show&#x27;).classList.remove(&#x27;hidden&#x27;);$(&#x27;role&#x27;).textContent=g.type;$(&#x27;icon&#x27;).textContent=g.type===&#x27;Cittadino&#x27;?&#x27;🙂&#x27;:g.type===&#x27;Impostore&#x27;?&#x27;🕵️&#x27;:&#x27;❓&#x27;;$(&#x27;label&#x27;).textContent=g.type===&#x27;Cittadino&#x27;?&#x27;PAROLA SEGRETA&#x27;:g.type===&#x27;Impostore&#x27;?&#x27;PAROLA SIMILE&#x27;:&#x27;NESSUN INDIZIO&#x27;;$(&#x27;word&#x27;).textContent=g.type===&#x27;Cittadino&#x27;?pair[0]:g.type===&#x27;Impostore&#x27;?pair[1]:&#x27;❓&#x27;}function nextPlayer(){idx++;if(idx&lt;game.length){$(&#x27;show&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;pass&#x27;).classList.remove(&#x27;hidden&#x27;);$(&#x27;who&#x27;).textContent=game[idx].name}else{Swal.fire(&#x27;Partita pronta!&#x27;,&#x27;Iniziate a discutere!&#x27;,&#x27;success&#x27;);$(&#x27;show&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;setup&#x27;).classList.remove(&#x27;hidden&#x27;)}}$(&#x27;name&#x27;).addEventListener(&#x27;keydown&#x27;,e=&gt;{if(e.key===&#x27;Enter&#x27;)addPlayer()});$(&#x27;words&#x27;).value=localStorage.getItem(&#x27;imp_words_v3&#x27;)||examples.map(x=&gt;x.join(&#x27; | &#x27;)).join(&#x27;\n&#x27;);render()&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+</section>
+
+<section id="yatzee" class="screen">
+<div class="appbar"><button class="back" onclick="goHomeConfirm()">← Torna indietro</button><div class="title">🎲 Yahtzee</div><div class="spacer"></div></div>
+<iframe id="yatzeeFrame" class="frame" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;it&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,viewport-fit=cover&quot;&gt;
+&lt;title&gt;Yahtzee — Game Hub&lt;/title&gt;
+&lt;style&gt;
+:root{
+ --bg:#071412;--panel:#101e1b;--panel2:#142722;--line:#29453e;
+ --accent:#19c99e;--accent2:#63e6be;--gold:#ffd166;--text:#f5fffc;
+ --muted:#9db7b0;--danger:#ff6b81;--white:#fff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Arial,sans-serif;background:
+radial-gradient(circle at 10% 0%,rgba(25,201,158,.20),transparent 28%),
+radial-gradient(circle at 90% 100%,rgba(99,230,190,.10),transparent 28%),var(--bg);color:var(--text)}
+body{padding-bottom:env(safe-area-inset-bottom)}
+.hidden{display:none!important}
+.app{max-width:1180px;margin:auto;padding:16px 16px 105px}
+.hero{text-align:center;padding:12px 8px 18px}
+.hero .dice{font-size:58px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.4))}
+.hero h1{margin:4px 0;font-size:clamp(30px,6vw,52px);letter-spacing:-1.5px}
+.hero h1 span{color:var(--accent)}
+.small{font-size:12px;color:var(--muted)}
+.card{background:linear-gradient(145deg,rgba(20,39,34,.96),rgba(13,26,23,.96));border:1px solid var(--line);border-radius:22px;padding:17px;margin:12px 0;box-shadow:0 15px 45px rgba(0,0,0,.18)}
+.title{font-size:17px;font-weight:900;margin-bottom:12px}
+.row{display:flex;gap:9px}
+.input{width:100%;padding:13px;border-radius:13px;border:1px solid #35574e;background:#091612;color:#fff;font-size:16px;outline:none}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(25,201,158,.12)}
+.btn{border:0;border-radius:13px;padding:13px 16px;background:linear-gradient(135deg,#0b8f72,#19c99e);color:#fff;font-weight:900;cursor:pointer;min-height:46px}
+.secondary{background:#263c36}.danger{background:#713044}.gold{background:linear-gradient(135deg,#b88618,#ffd166);color:#1d1706}
+.full{width:100%;margin-top:9px}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.player{display:flex;align-items:center;gap:10px;padding:10px;background:#0b1815;border:1px solid #203a33;border-radius:15px}
+.avatar{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#213b34;display:grid;place-items:center;font-size:20px}
+.pinfo{flex:1}.pname{font-weight:850}
+.validation{text-align:center;margin:12px 0}
+.valid{color:#63e6be}.invalid{color:#ff7187}
+
+#game{padding-top:8px}
+.game-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.turn-badge{padding:10px 13px;border-radius:999px;background:#15352d;border:1px solid #2d6254;font-weight:850}
+.roll-badge{padding:9px 12px;border-radius:12px;background:#0d211c;color:var(--gold);font-weight:900}
+.dice-area{display:grid;grid-template-columns:repeat(5,minmax(54px,88px));justify-content:center;gap:12px;margin:18px 0 13px}
+.die{
+ width:100%;aspect-ratio:1;border-radius:18px;background:linear-gradient(145deg,#fff,#dceae6);
+ border:4px solid transparent;color:#15231f;display:grid;place-items:center;position:relative;
+ box-shadow:0 13px 25px rgba(0,0,0,.32),inset 0 1px 0 #fff;cursor:pointer;
+ font-size:0;transition:transform .18s,border-color .18s,box-shadow .18s;
+}
+.die.selected{border-color:var(--accent2);box-shadow:0 0 0 4px rgba(25,201,158,.16),0 13px 30px rgba(0,0,0,.35),inset 0 1px 0 #fff;transform:translateY(-5px)}
+.die.rolling{animation:dieRoll .58s cubic-bezier(.3,.8,.3,1)}
+.die-face{width:76%;height:76%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:4px}
+.dot{width:100%;aspect-ratio:1;border-radius:50%;background:#15231f;align-self:center;justify-self:center}
+@keyframes dieRoll{0%{transform:rotate(0) scale(1)}20%{transform:rotate(110deg) scale(.86)}45%{transform:rotate(210deg) scale(1.08)}70%{transform:rotate(310deg) scale(.92)}100%{transform:rotate(360deg) scale(1)}}
+.dice-hint{text-align:center;color:var(--muted);font-size:12px;margin-bottom:12px}
+.float-roll{
+ position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,calc(18px + env(safe-area-inset-bottom)));
+ z-index:50;border:0;border-radius:18px;padding:15px 20px;background:linear-gradient(135deg,#0b8f72,#19c99e);
+ color:#fff;font-weight:950;font-size:15px;box-shadow:0 15px 35px rgba(0,0,0,.42);cursor:pointer
+}
+.float-roll:disabled{opacity:.55;cursor:not-allowed}
+.status{text-align:center;min-height:22px;color:#b8d3cb;font-size:13px}
+
+.score-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:18px;border:1px solid #29453e}
+.score-table{width:100%;min-width:700px;border-collapse:separate;border-spacing:0;background:#0c1815}
+.score-table th,.score-table td{border-right:1px solid #29453e;border-bottom:1px solid #29453e;padding:9px 8px;text-align:center}
+.score-table th:first-child,.score-table td:first-child{text-align:left;position:sticky;left:0;z-index:3;background:#10221d}
+.score-table thead th{background:#132a24;position:sticky;top:0;z-index:4;font-size:12px}
+.score-table th:first-child{z-index:5}
+.cat-name{font-weight:800;white-space:nowrap}
+.cat-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.score-cell{min-width:86px;height:49px;color:#e8faf5;font-weight:850;cursor:pointer;border-radius:8px;transition:.16s}
+.score-cell.preview{background:rgba(25,201,158,.10);color:var(--accent2)}
+.score-cell.preview:hover{background:rgba(25,201,158,.22);transform:scale(.98)}
+.score-cell.locked{color:#fff;background:#17352d}
+.score-cell.empty{color:#55756c;background:#0e1d19}
+.score-cell.yatzee-bonus{color:var(--gold)}
+.total-row td{background:#10221d;font-weight:950;color:#fff}
+.grand-row td{background:linear-gradient(90deg,#15382f,#10231f);font-size:16px;color:var(--gold);font-weight:950}
+
+.section-label{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px}
+.section-label h2{font-size:17px;margin:0}.section-label span{font-size:11px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.game-over{text-align:center;padding:30px 18px}
+.winner-name{font-size:clamp(30px,7vw,48px);font-weight:950;color:var(--gold);margin:8px 0}
+
+@media(max-width:650px){
+ .app{padding:10px 10px 110px}
+ .hero{padding-top:8px}
+ .hero .dice{font-size:48px}
+ .card{border-radius:18px;padding:13px}
+ .row{flex-direction:column}
+ .dice-area{gap:7px;grid-template-columns:repeat(5,minmax(48px,68px))}
+ .die{border-radius:14px;border-width:3px}
+ .score-table{min-width:660px}
+ .score-table th,.score-table td{padding:8px 6px}
+ .float-roll{left:12px;right:12px;bottom:max(12px,calc(12px + env(safe-area-inset-bottom)));text-align:center}
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div id=&quot;setup&quot; class=&quot;app&quot;&gt;
+ &lt;div class=&quot;hero&quot;&gt;&lt;div class=&quot;dice&quot;&gt;🎲🏆&lt;/div&gt;&lt;h1&gt;YAHTZ&lt;span&gt;EE&lt;/span&gt;&lt;/h1&gt;&lt;div class=&quot;small&quot;&gt;5 dadi • 3 lanci per turno • completa tutte le categorie&lt;/div&gt;&lt;/div&gt;
+
+ &lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;title&quot;&gt;👥 Partecipanti&lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;
+   &lt;input id=&quot;playerName&quot; class=&quot;input&quot; placeholder=&quot;Nome giocatore&quot; autocomplete=&quot;off&quot;&gt;
+   &lt;button class=&quot;btn&quot; onclick=&quot;addPlayer()&quot;&gt;Aggiungi&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;playersList&quot; class=&quot;list&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;validation&quot; class=&quot;validation&quot;&gt;&lt;/div&gt;
+ &lt;/div&gt;
+
+ &lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;title&quot;&gt;📖 Regole di questa versione&lt;/div&gt;
+  &lt;div class=&quot;small&quot; style=&quot;line-height:1.65&quot;&gt;
+   Categorie 1–6 = somma dei soli dadi con quel numero. Bonus: 50 punti se la somma 1–6 supera 63, oppure 150 punti se supera 150.
+   Coppia = 10 + gli altri dadi; doppia coppia = 20 + gli altri dadi; full = 25; tris/quattro/chance = somma totale;
+   scala piccola = 30; scala grande = 40; Yahtzee = 50. Ogni Yahtzee successivo vale anche +100 punti sulla categoria scelta.
+  &lt;/div&gt;
+ &lt;/div&gt;
+
+ &lt;div class=&quot;card&quot;&gt;
+  &lt;button id=&quot;startBtn&quot; class=&quot;btn full&quot; disabled onclick=&quot;startGame()&quot;&gt;🎲 Inizia nuova partita&lt;/button&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;game&quot; class=&quot;app hidden&quot;&gt;
+ &lt;div class=&quot;game-top&quot;&gt;
+  &lt;div&gt;&lt;div class=&quot;small&quot;&gt;TURNO&lt;/div&gt;&lt;div id=&quot;turnName&quot; class=&quot;turn-badge&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
+  &lt;div id=&quot;rollBadge&quot; class=&quot;roll-badge&quot;&gt;Lanci: 0 / 3&lt;/div&gt;
+ &lt;/div&gt;
+
+ &lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;section-label&quot;&gt;&lt;h2&gt;🎲 I tuoi dadi&lt;/h2&gt;&lt;span&gt;Tocca un dado per conservarlo&lt;/span&gt;&lt;/div&gt;
+  &lt;div id=&quot;diceArea&quot; class=&quot;dice-area&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;dice-hint&quot;&gt;I dadi illuminati non vengono rilanciati.&lt;/div&gt;
+  &lt;div id=&quot;status&quot; class=&quot;status&quot;&gt;Premi “Lancia dadi” per iniziare.&lt;/div&gt;
+ &lt;/div&gt;
+
+ &lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;section-label&quot;&gt;&lt;h2&gt;🏆 Tabellone&lt;/h2&gt;&lt;span&gt;Clicca un&#x27;anteprima per assegnare il punteggio&lt;/span&gt;&lt;/div&gt;
+  &lt;div id=&quot;scoreWrap&quot; class=&quot;score-wrap&quot;&gt;&lt;/div&gt;
+ &lt;/div&gt;
+
+ &lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+   &lt;button class=&quot;btn secondary&quot; onclick=&quot;confirmNewGame()&quot;&gt;↻ Nuova partita&lt;/button&gt;
+   &lt;button class=&quot;btn secondary&quot; onclick=&quot;confirmResetTurn()&quot;&gt;↺ Riprova turno&lt;/button&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;gameOver&quot; class=&quot;app hidden&quot;&gt;
+ &lt;div class=&quot;card game-over&quot;&gt;
+  &lt;div style=&quot;font-size:64px&quot;&gt;🏆&lt;/div&gt;
+  &lt;div class=&quot;small&quot;&gt;PARTITA TERMINATA&lt;/div&gt;
+  &lt;h1&gt;Vince&lt;/h1&gt;
+  &lt;div id=&quot;winnerName&quot; class=&quot;winner-name&quot;&gt;—&lt;/div&gt;
+  &lt;div id=&quot;finalScores&quot; class=&quot;small&quot; style=&quot;line-height:1.8&quot;&gt;&lt;/div&gt;
+  &lt;button class=&quot;btn full&quot; onclick=&quot;backToSetup()&quot;&gt;🎲 Nuova partita&lt;/button&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button id=&quot;rollBtn&quot; class=&quot;float-roll hidden&quot; onclick=&quot;rollDice()&quot;&gt;🎲 Lancia dadi &lt;span id=&quot;rollBtnCount&quot;&gt;3&lt;/span&gt;&lt;/button&gt;
+
+&lt;script&gt;
+const $=id=&gt;document.getElementById(id);
+let players=JSON.parse(localStorage.getItem(&#x27;yatzee_players_v1&#x27;)||&#x27;[]&#x27;);
+let gamePlayers=[],turn=0,rolls=0,dice=[1,1,1,1,1],held=[false,false,false,false,false],rolling=false;
+const categories=[
+ {id:&#x27;ones&#x27;,name:&#x27;1&#x27;,desc:&#x27;Somma dei 1&#x27;,fn:d=&gt;sumN(d,1)},
+ {id:&#x27;twos&#x27;,name:&#x27;2&#x27;,desc:&#x27;Somma dei 2&#x27;,fn:d=&gt;sumN(d,2)},
+ {id:&#x27;threes&#x27;,name:&#x27;3&#x27;,desc:&#x27;Somma dei 3&#x27;,fn:d=&gt;sumN(d,3)},
+ {id:&#x27;fours&#x27;,name:&#x27;4&#x27;,desc:&#x27;Somma dei 4&#x27;,fn:d=&gt;sumN(d,4)},
+ {id:&#x27;fives&#x27;,name:&#x27;5&#x27;,desc:&#x27;Somma dei 5&#x27;,fn:d=&gt;sumN(d,5)},
+ {id:&#x27;sixes&#x27;,name:&#x27;6&#x27;,desc:&#x27;Somma dei 6&#x27;,fn:d=&gt;sumN(d,6)},
+ {id:&#x27;bonus&#x27;,name:&#x27;Bonus dadi&#x27;,desc:&#x27;&gt;63 = 50 • &gt;150 = 150&#x27;,fn:bonusScore},
+ {id:&#x27;pair&#x27;,name:&#x27;Coppia&#x27;,desc:&#x27;10 + somma dadi restanti&#x27;,fn:pairScore},
+ {id:&#x27;twoPair&#x27;,name:&#x27;Doppia coppia&#x27;,desc:&#x27;20 + somma dadi restanti&#x27;,fn:twoPairScore},
+ {id:&#x27;full&#x27;,name:&#x27;Full House&#x27;,desc:&#x27;3 uguali + 2 uguali&#x27;,fn:d=&gt;counts(d).includes(3)&amp;&amp;counts(d).includes(2)?25:0},
+ {id:&#x27;three&#x27;,name:&#x27;3 di un tipo&#x27;,desc:&#x27;Somma di tutti i dadi&#x27;,fn:d=&gt;counts(d).some(x=&gt;x&gt;=3)?sum(d):0},
+ {id:&#x27;four&#x27;,name:&#x27;4 di un tipo&#x27;,desc:&#x27;Somma di tutti i dadi&#x27;,fn:d=&gt;counts(d).some(x=&gt;x&gt;=4)?sum(d):0},
+ {id:&#x27;smallStraight&#x27;,name:&#x27;Scala piccola&#x27;,desc:&#x27;4 consecutivi = 30&#x27;,fn:d=&gt;hasSmallStraight(d)?30:0},
+ {id:&#x27;largeStraight&#x27;,name:&#x27;Scala grande&#x27;,desc:&#x27;5 consecutivi = 40&#x27;,fn:d=&gt;hasLargeStraight(d)?40:0},
+ {id:&#x27;yahtzee&#x27;,name:&#x27;Yahtzee&#x27;,desc:&#x27;5 dadi uguali = 50&#x27;,fn:d=&gt;new Set(d).size===1?50:0},
+ {id:&#x27;chance&#x27;,name:&#x27;Chance&#x27;,desc:&#x27;Somma di tutti i numeri&#x27;,fn:d=&gt;sum(d)}
+];
+function sum(a){return a.reduce((x,y)=&gt;x+y,0)}
+function sumN(d,n){return d.filter(x=&gt;x===n).reduce((a,b)=&gt;a+b,0)}
+function counts(d){return Object.values(d.reduce((o,n)=&gt;(o[n]=(o[n]||0)+1,o),{}))}
+function freq(d){return d.reduce((o,n)=&gt;(o[n]=(o[n]||0)+1,o),{})}
+function uniqueSorted(d){return [...new Set(d)].sort((a,b)=&gt;a-b)}
+function hasSmallStraight(d){const u=uniqueSorted(d);return [1,2,3,4].every(n=&gt;u.includes(n))||[2,3,4,5].every(n=&gt;u.includes(n))||[3,4,5,6].every(n=&gt;u.includes(n))}
+function hasLargeStraight(d){const u=uniqueSorted(d);return u.length===5&amp;&amp;((u[0]===1&amp;&amp;u[4]===5)||(u[0]===2&amp;&amp;u[4]===6))}
+function bonusScore(){const upper=gamePlayers[turn]?upperTotal(gamePlayers[turn]):0;return upper&gt;150?150:(upper&gt;63?50:0)}
+function upperTotal(p){return [&#x27;ones&#x27;,&#x27;twos&#x27;,&#x27;threes&#x27;,&#x27;fours&#x27;,&#x27;fives&#x27;,&#x27;sixes&#x27;].reduce((s,id)=&gt;s+(p.scores[id]||0),0)}
+function totalScore(p){return categories.reduce((s,c)=&gt;s+(p.scores[c.id]||0),0)}
+function yahtzeeCount(p){return p.yahtzees||0}
+function addPlayer(){
+ const n=$(&#x27;playerName&#x27;).value.trim();
+ if(!n)return Swal.fire({title:&#x27;Errore&#x27;,text:&#x27;Inserisci un nome valido.&#x27;,icon:&#x27;error&#x27;,background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;});
+ if(players.some(p=&gt;p.name.toLowerCase()===n.toLowerCase()))return Swal.fire({title:&#x27;Attenzione&#x27;,text:&#x27;Giocatore già presente.&#x27;,icon:&#x27;warning&#x27;,background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;});
+ players.push({id:crypto.randomUUID(),name:n});localStorage.setItem(&#x27;yatzee_players_v1&#x27;,JSON.stringify(players));
+ $(&#x27;playerName&#x27;).value=&#x27;&#x27;;renderPlayers();
+}
+function removePlayer(i){players.splice(i,1);localStorage.setItem(&#x27;yatzee_players_v1&#x27;,JSON.stringify(players));renderPlayers()}
+function renderPlayers(){
+ $(&#x27;playersList&#x27;).innerHTML=players.map((p,i)=&gt;`&lt;div class=&quot;player&quot;&gt;&lt;div class=&quot;avatar&quot;&gt;👤&lt;/div&gt;&lt;div class=&quot;pinfo&quot;&gt;&lt;div class=&quot;pname&quot;&gt;${esc(p.name)}&lt;/div&gt;&lt;div class=&quot;small&quot;&gt;Pronto per Yahtzee&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;btn danger&quot; onclick=&quot;removePlayer(${i})&quot;&gt;✕&lt;/button&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+ const ok=players.length&gt;=1;
+ $(&#x27;validation&#x27;).innerHTML=ok?`&lt;span class=&quot;valid&quot;&gt;✓ ${players.length} ${players.length===1?&#x27;giocatore pronto&#x27;:&#x27;giocatori pronti&#x27;}&lt;/span&gt;`:`&lt;span class=&quot;invalid&quot;&gt;Aggiungi almeno un giocatore&lt;/span&gt;`;
+ $(&#x27;startBtn&#x27;).disabled=!ok;
+}
+function esc(s){const d=document.createElement(&#x27;div&#x27;);d.textContent=s;return d.innerHTML}
+$(&#x27;playerName&#x27;).addEventListener(&#x27;keydown&#x27;,e=&gt;{if(e.key===&#x27;Enter&#x27;)addPlayer()});
+
+function startGame(){
+ gamePlayers=players.map(p=&gt;({id:p.id,name:p.name,scores:{},yahtzees:0}));
+ turn=0;rolls=0;held=[false,false,false,false,false];dice=[1,1,1,1,1];
+ $(&#x27;setup&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;gameOver&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;game&#x27;).classList.remove(&#x27;hidden&#x27;);$(&#x27;rollBtn&#x27;).classList.remove(&#x27;hidden&#x27;);
+ renderDice();renderTable();updateTurnUI();
+}
+function updateTurnUI(){
+ const p=gamePlayers[turn];$(&#x27;turnName&#x27;).textContent=p.name;
+ $(&#x27;rollBadge&#x27;).textContent=`Lanci: ${rolls} / 3`;
+ $(&#x27;rollBtnCount&#x27;).textContent=Math.max(0,3-rolls);
+ $(&#x27;rollBtn&#x27;).disabled=rolls&gt;=3||rolling;
+ $(&#x27;status&#x27;).textContent=rolls===0?&#x27;Premi “Lancia dadi” per iniziare.&#x27;:rolls&lt;3?&#x27;Seleziona i dadi da conservare, poi rilancia.&#x27;:&#x27;Hai esaurito i 3 lanci: scegli una casella.&#x27;;
+}
+function dieFace(n){
+ const map={1:[4],2:[1,7],3:[1,4,7],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+ return `&lt;div class=&quot;die-face&quot;&gt;${Array.from({length:9},(_,i)=&gt;map[n].includes(i)?&#x27;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;&#x27;:&#x27;&lt;span&gt;&lt;/span&gt;&#x27;).join(&#x27;&#x27;)}&lt;/div&gt;`;
+}
+function renderDice(){
+ $(&#x27;diceArea&#x27;).innerHTML=dice.map((n,i)=&gt;`&lt;button class=&quot;die ${held[i]?&#x27;selected&#x27;:&#x27;&#x27;}&quot; aria-label=&quot;Dado ${i+1}: ${n}&quot; onclick=&quot;toggleHold(${i})&quot;&gt;${dieFace(n)}&lt;/button&gt;`).join(&#x27;&#x27;);
+}
+function toggleHold(i){
+ if(rolls===0||rolling)return;
+ held[i]=!held[i];renderDice();
+}
+function randomDie(){return Math.floor(Math.random()*6)+1}
+function rollDice(){
+ if(rolling||rolls&gt;=3)return;
+ rolling=true;rolls++;
+ const els=[...document.querySelectorAll(&#x27;.die&#x27;)];
+ els.forEach((el,i)=&gt;{if(!held[i])el.classList.add(&#x27;rolling&#x27;)});
+ const start=performance.now(),duration=620;
+ function anim(now){
+  const p=Math.min(1,(now-start)/duration);
+  if(p&lt;1){
+   els.forEach((el,i)=&gt;{if(!held[i]){dice[i]=randomDie();el.innerHTML=dieFace(dice[i])}});
+   requestAnimationFrame(anim);
+  }else{
+   els.forEach(el=&gt;el.classList.remove(&#x27;rolling&#x27;));rolling=false;
+   renderDice();renderTable();updateTurnUI();
+  }
+ }
+ requestAnimationFrame(anim);
+}
+function previewScore(p,c){
+ if(c.id===&#x27;bonus&#x27;)return bonusScore();
+ let v=c.fn(dice);
+ // Yahtzee bonus: ogni Yahtzee oltre il primo aggiunge 100 alla categoria selezionata.
+ if(new Set(dice).size===1 &amp;&amp; p.yahtzees&gt;0 &amp;&amp; c.id!==&#x27;yahtzee&#x27;)v+=100;
+ return v;
+}
+function cellHtml(p,c){
+ if(Object.prototype.hasOwnProperty.call(p.scores,c.id)){
+   const extra=(c.id!==&#x27;yahtzee&#x27;&amp;&amp;p.scores[c.id]!==null)?&#x27;&#x27;:&#x27;&#x27;;
+   return `&lt;div class=&quot;score-cell locked&quot;&gt;${p.scores[c.id]}${extra}&lt;/div&gt;`;
+ }
+ if(rolls===0)return `&lt;div class=&quot;score-cell empty&quot;&gt;—&lt;/div&gt;`;
+ const v=previewScore(p,c);
+ const canChoose=rolls&gt;0;
+ return `&lt;div class=&quot;score-cell ${canChoose?&#x27;preview&#x27;:&#x27;&#x27;}&quot; onclick=&quot;${canChoose?`chooseScore(&#x27;${c.id}&#x27;)`:&#x27;&#x27;}&quot;&gt;${v}&lt;/div&gt;`;
+}
+function renderTable(){
+ const cols=gamePlayers.map(p=&gt;`&lt;th&gt;${esc(p.name)}&lt;div class=&quot;cat-sub&quot;&gt;${totalScore(p)} pt&lt;/div&gt;&lt;/th&gt;`).join(&#x27;&#x27;);
+ let rows=&#x27;&#x27;;
+ categories.forEach(c=&gt;{
+  rows+=`&lt;tr&gt;&lt;td&gt;&lt;div class=&quot;cat-name&quot;&gt;${c.name}&lt;/div&gt;&lt;div class=&quot;cat-sub&quot;&gt;${c.desc}&lt;/div&gt;&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${cellHtml(p,c)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+ });
+ rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Totale attuale&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+ rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Yahtzee bonus&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td class=&quot;score-cell ${p.yahtzees?&#x27;yatzee-bonus&#x27;:&#x27;&#x27;}&quot;&gt;${p.yahtzees?&#x27;+ &#x27;+(Math.max(0,p.yahtzees-1)*100):&#x27;—&#x27;}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+ rows+=`&lt;tr class=&quot;grand-row&quot;&gt;&lt;td&gt;TOTALE&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+ $(&#x27;scoreWrap&#x27;).innerHTML=`&lt;table class=&quot;score-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Categoria&lt;/th&gt;${cols}&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${rows}&lt;/tbody&gt;&lt;/table&gt;`;
+}
+async function chooseScore(id){
+ if(rolling||rolls===0)return;
+ const p=gamePlayers[turn],c=categories.find(x=&gt;x.id===id);
+ if(!c||Object.prototype.hasOwnProperty.call(p.scores,id))return;
+ const v=previewScore(p,c);
+ const isY=new Set(dice).size===1;
+ const result=await Swal.fire({
+  title:c.name,
+  html:`&lt;div style=&quot;font-size:38px;font-weight:900;color:#19c99e&quot;&gt;${v}&lt;/div&gt;&lt;div style=&quot;margin-top:6px;color:#9db7b0&quot;&gt;${isY&amp;&amp;p.yahtzees?&#x27;Include +100 bonus Yahtzee.&#x27;:&#x27;&#x27;}&lt;/div&gt;`,
+  showCancelButton:true,confirmButtonText:&#x27;Assegna punteggio&#x27;,cancelButtonText:&#x27;Annulla&#x27;,
+  background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;
+ });
+ if(!result.isConfirmed)return;
+ p.scores[id]=v;
+ if(isY)p.yahtzees++;
+ const completed=categories.every(x=&gt;Object.prototype.hasOwnProperty.call(p.scores,x.id));
+ if(completed){finishGame();return}
+ turn=(turn+1)%gamePlayers.length;rolls=0;held=[false,false,false,false,false];dice=[1,1,1,1,1];
+ renderDice();renderTable();updateTurnUI();
+}
+function finishGame(){
+ $(&#x27;game&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;rollBtn&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;gameOver&#x27;).classList.remove(&#x27;hidden&#x27;);
+ const ranked=[...gamePlayers].sort((a,b)=&gt;totalScore(b)-totalScore(a)),winner=ranked[0];
+ $(&#x27;winnerName&#x27;).textContent=winner.name;
+ $(&#x27;finalScores&#x27;).innerHTML=ranked.map((p,i)=&gt;`${i+1}. &lt;b&gt;${esc(p.name)}&lt;/b&gt; — ${totalScore(p)} punti`).join(&#x27;&lt;br&gt;&#x27;);
+}
+async function confirmNewGame(){
+ const r=await Swal.fire({title:&#x27;Nuova partita?&#x27;,text:&#x27;Il tabellone corrente verrà chiuso.&#x27;,icon:&#x27;warning&#x27;,showCancelButton:true,confirmButtonText:&#x27;Sì, nuova partita&#x27;,cancelButtonText:&#x27;Annulla&#x27;,background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;});
+ if(r.isConfirmed)backToSetup();
+}
+async function confirmResetTurn(){
+ if(rolls===0)return;
+ const r=await Swal.fire({title:&#x27;Rifare il turno?&#x27;,text:&#x27;I lanci e i dadi conservati verranno azzerati.&#x27;,showCancelButton:true,confirmButtonText:&#x27;Sì, rifai&#x27;,cancelButtonText:&#x27;Annulla&#x27;,background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;});
+ if(r.isConfirmed){rolls=0;held=[false,false,false,false,false];dice=[1,1,1,1,1];renderDice();renderTable();updateTurnUI()}
+}
+function backToSetup(){$(&#x27;game&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;gameOver&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;setup&#x27;).classList.remove(&#x27;hidden&#x27;);$(&#x27;rollBtn&#x27;).classList.add(&#x27;hidden&#x27;);renderPlayers()}
+renderPlayers();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
 </section>
 
 <section id="wheel" class="screen">
