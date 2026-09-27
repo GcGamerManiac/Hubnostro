@@ -158,11 +158,11 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .validation{text-align:center;margin:12px 0}
 .valid{color:#63e6be}.invalid{color:#ff7187}
 
-#game{padding-top:8px}
+#game{padding:4px 0 6px}.game-info-sticky{position:sticky;bottom:0;z-index:20;background:rgba(9,24,20,.97);border:1px solid #29453e;border-radius:14px;padding:8px;margin-top:8px;box-shadow:0 -8px 25px rgba(0,0,0,.3);backdrop-filter:blur(10px)}.turn-line{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px;font-size:13px}.turn-line .small{font-size:8px;color:var(--muted);margin-right:3px}.turn-line strong{font-size:14px}.game-actions{margin:6px 0 0}.game-actions .btn{width:100%;padding:8px;font-size:11px}
 .game-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .turn-badge{padding:10px 13px;border-radius:999px;background:#15352d;border:1px solid #2d6254;font-weight:850}
 .roll-badge{padding:9px 12px;border-radius:12px;background:#0d211c;color:var(--gold);font-weight:900}
-.dice-area{display:grid;grid-template-columns:repeat(5,minmax(54px,88px));justify-content:center;gap:12px;margin:18px 0 13px}
+.dice-area{display:grid;grid-template-columns:repeat(5,minmax(42px,58px));justify-content:center;gap:5px;margin:4px 0}
 .die{
  width:100%;aspect-ratio:1;border-radius:18px;background:linear-gradient(145deg,#fff,#dceae6);
  border:4px solid transparent;color:#15231f;display:grid;place-items:center;position:relative;
@@ -174,31 +174,31 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .die-face{width:76%;height:76%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:4px}
 .dot{width:100%;aspect-ratio:1;border-radius:50%;background:#15231f;align-self:center;justify-self:center}
 @keyframes dieRoll{0%{transform:rotate(0) scale(1)}20%{transform:rotate(110deg) scale(.86)}45%{transform:rotate(210deg) scale(1.08)}70%{transform:rotate(310deg) scale(.92)}100%{transform:rotate(360deg) scale(1)}}
-.dice-hint{text-align:center;color:var(--muted);font-size:12px;margin-bottom:12px}
+.dice-hint{text-align:center;color:var(--muted);font-size:9px;margin:2px 0}
 .float-roll{
  position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,calc(18px + env(safe-area-inset-bottom)));
  z-index:50;border:0;border-radius:18px;padding:15px 20px;background:linear-gradient(135deg,#0b8f72,#19c99e);
  color:#fff;font-weight:950;font-size:15px;box-shadow:0 15px 35px rgba(0,0,0,.42);cursor:pointer
 }
 .float-roll:disabled{opacity:.55;cursor:not-allowed}
-.status{text-align:center;min-height:22px;color:#b8d3cb;font-size:13px}
+.status{text-align:center;min-height:16px;color:#b8d3cb;font-size:10px}
 
-.score-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:18px;border:1px solid #29453e}
-.score-table{width:100%;min-width:700px;border-collapse:separate;border-spacing:0;background:#0c1815}
-.score-table th,.score-table td{border-right:1px solid #29453e;border-bottom:1px solid #29453e;padding:9px 8px;text-align:center}
-.score-table th:first-child,.score-table td:first-child{text-align:left;position:sticky;left:0;z-index:3;background:#10221d}
-.score-table thead th{background:#132a24;position:sticky;top:0;z-index:4;font-size:12px}
+.score-wrap{overflow:hidden;border-radius:12px;border:1px solid #29453e}
+.score-table{width:100%;min-width:0;table-layout:fixed;border-collapse:separate;border-spacing:0;background:#0c1815}
+.score-table th,.score-table td{border-right:1px solid #29453e;border-bottom:1px solid #29453e;padding:3px 2px;text-align:center;font-size:10px;line-height:1.05}
+.score-table th:first-child,.score-table td:first-child{text-align:left;width:25%;background:#10221d}
+.score-table thead th{background:#132a24;position:sticky;top:0;z-index:4;font-size:10px}
 .score-table th:first-child{z-index:5}
-.cat-name{font-weight:800;white-space:nowrap}
-.cat-sub{font-size:10px;color:var(--muted);margin-top:2px}
-.score-cell{min-width:86px;height:49px;color:#e8faf5;font-weight:850;cursor:pointer;border-radius:8px;transition:.16s}
+.cat-name{font-weight:850;white-space:nowrap;font-size:10px}.cat-icon{display:inline-block;width:15px;text-align:center;margin-right:2px}
+.cat-sub{font-size:8px;color:var(--muted);margin-top:1px}
+.score-cell{min-width:0;height:27px;color:#e8faf5;font-weight:850;cursor:pointer;border-radius:8px;transition:.16s}
 .score-cell.preview{background:rgba(25,201,158,.10);color:var(--accent2)}
 .score-cell.preview:hover{background:rgba(25,201,158,.22);transform:scale(.98)}
 .score-cell.locked{color:#fff;background:#17352d}
 .score-cell.empty{color:#55756c;background:#0e1d19}
 .score-cell.yatzee-bonus{color:var(--gold)}
-.total-row td{background:#10221d;font-weight:950;color:#fff}
-.grand-row td{background:linear-gradient(90deg,#15382f,#10231f);font-size:16px;color:var(--gold);font-weight:950}
+.total-row td{background:#10221d;font-weight:950;color:#fff;height:25px}
+.grand-row td{background:linear-gradient(90deg,#15382f,#10231f);font-size:11px;color:var(--gold);font-weight:950}
 
 .section-label{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px}
 .section-label h2{font-size:17px;margin:0}.section-label span{font-size:11px;color:var(--muted)}
@@ -214,8 +214,11 @@ body{padding-bottom:env(safe-area-inset-bottom)}
  .row{flex-direction:column}
  .dice-area{gap:7px;grid-template-columns:repeat(5,minmax(48px,68px))}
  .die{border-radius:14px;border-width:3px}
- .score-table{min-width:660px}
- .score-table th,.score-table td{padding:8px 6px}
+ .score-table{min-width:0}
+ .score-table th,.score-table td{padding:3px 2px;font-size:9px}
+ .cat-name{font-size:9px}.cat-icon{width:13px}
+ .score-cell{height:25px;font-size:10px}
+ .grand-row td{font-size:10px}
  .float-roll{left:12px;right:12px;bottom:max(12px,calc(12px + env(safe-area-inset-bottom)));text-align:center}
 }
 &lt;/style&gt;
@@ -250,29 +253,17 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 &lt;/div&gt;
 
 &lt;div id=&quot;game&quot; class=&quot;app hidden&quot;&gt;
- &lt;div class=&quot;game-top&quot;&gt;
-  &lt;div&gt;&lt;div class=&quot;small&quot;&gt;TURNO&lt;/div&gt;&lt;div id=&quot;turnName&quot; class=&quot;turn-badge&quot;&gt;—&lt;/div&gt;&lt;/div&gt;
-  &lt;div id=&quot;rollBadge&quot; class=&quot;roll-badge&quot;&gt;Lanci: 0 / 3&lt;/div&gt;
- &lt;/div&gt;
-
- &lt;div class=&quot;card&quot;&gt;
-  &lt;div class=&quot;section-label&quot;&gt;&lt;h2&gt;🎲 I tuoi dadi&lt;/h2&gt;&lt;span&gt;Tocca un dado per conservarlo&lt;/span&gt;&lt;/div&gt;
-  &lt;div id=&quot;diceArea&quot; class=&quot;dice-area&quot;&gt;&lt;/div&gt;
-  &lt;div class=&quot;dice-hint&quot;&gt;I dadi illuminati non vengono rilanciati.&lt;/div&gt;
-  &lt;div id=&quot;status&quot; class=&quot;status&quot;&gt;Premi “Lancia dadi” per iniziare.&lt;/div&gt;
- &lt;/div&gt;
-
- &lt;div class=&quot;card&quot;&gt;
-  &lt;div class=&quot;section-label&quot;&gt;&lt;h2&gt;🏆 Tabellone&lt;/h2&gt;&lt;span&gt;Clicca un&#x27;anteprima per assegnare il punteggio&lt;/span&gt;&lt;/div&gt;
+ &lt;div class=&quot;card score-card&quot;&gt;
+  &lt;div class=&quot;section-label compact-label&quot;&gt;&lt;h2&gt;🏆 Tabellone&lt;/h2&gt;&lt;/div&gt;
   &lt;div id=&quot;scoreWrap&quot; class=&quot;score-wrap&quot;&gt;&lt;/div&gt;
  &lt;/div&gt;
-
- &lt;div class=&quot;card&quot;&gt;
-  &lt;div class=&quot;actions&quot;&gt;
-   &lt;button class=&quot;btn secondary&quot; onclick=&quot;confirmNewGame()&quot;&gt;↻ Nuova partita&lt;/button&gt;
-   &lt;button class=&quot;btn secondary&quot; onclick=&quot;confirmResetTurn()&quot;&gt;↺ Riprova turno&lt;/button&gt;
-  &lt;/div&gt;
+ &lt;div class=&quot;game-info-sticky&quot;&gt;
+  &lt;div class=&quot;turn-line&quot;&gt;&lt;div&gt;&lt;span class=&quot;small&quot;&gt;TURNO&lt;/span&gt; &lt;strong id=&quot;turnName&quot;&gt;—&lt;/strong&gt;&lt;/div&gt;&lt;div id=&quot;rollBadge&quot; class=&quot;roll-badge&quot;&gt;Tiri rimasti: 3&lt;/div&gt;&lt;/div&gt;
+  &lt;div id=&quot;diceArea&quot; class=&quot;dice-area&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;status&quot; class=&quot;status&quot;&gt;Premi “Lancia dadi” per iniziare.&lt;/div&gt;
+  &lt;div class=&quot;dice-hint&quot;&gt;Tocca i dadi per conservarli.&lt;/div&gt;
  &lt;/div&gt;
+ &lt;div class=&quot;game-actions&quot;&gt;&lt;button class=&quot;btn secondary&quot; onclick=&quot;confirmNewGame()&quot;&gt;↻ Nuova partita&lt;/button&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;div id=&quot;gameOver&quot; class=&quot;app hidden&quot;&gt;
@@ -294,15 +285,21 @@ let players=JSON.parse(localStorage.getItem(&#x27;yatzee_players_v1&#x27;)||&#x2
 let gamePlayers=[],turn=0,rolls=0,dice=[1,1,1,1,1],held=[false,false,false,false,false],rolling=false;
 function pairScore(d){
  const f=freq(d);
- const pairs=Object.keys(f).filter(k=>f[k]>=2).map(Number);
+ const pairs=Object.keys(f).filter(k=&gt;f[k]&gt;=2).map(Number).sort((a,b)=&gt;a-b);
  if(!pairs.length)return 0;
- return Math.max(...pairs)*2;
+ const pair=pairs[0];
+ const remaining=d.slice();
+ let removed=0;
+ for(let i=remaining.length-1;i&gt;=0 &amp;&amp; removed&lt;2;i--){if(remaining[i]===pair){remaining.splice(i,1);removed++;}}
+ return removed===2 ? 10 + sum(remaining) : 0;
 }
 function twoPairScore(d){
  const f=freq(d);
- const pairs=Object.keys(f).filter(k=>f[k]>=2).map(Number).sort((a,b)=>b-a);
- if(pairs.length<2)return 0;
- return pairs[0]*2+pairs[1]*2;
+ const pairs=Object.keys(f).filter(k=&gt;f[k]&gt;=2).map(Number).sort((a,b)=&gt;a-b);
+ if(pairs.length&lt;2)return 0;
+ const singleton=Object.keys(f).map(Number).find(n=&gt;f[n]===1);
+ if(singleton===undefined)return 0;
+ return 20 + singleton;
 }
 const gameCategories=[
  {id:&#x27;ones&#x27;,name:&#x27;1&#x27;,desc:&#x27;Somma dei 1&#x27;,fn:d=&gt;sumN(d,1)},
@@ -400,21 +397,22 @@ function previewScore(p,c){
  if(new Set(dice).size===1 &amp;&amp; p.yahtzees&gt;0 &amp;&amp; c.id!==&#x27;yahtzee&#x27;)v+=100;
  return v;
 }
-function cellHtml(p,c){
+const categoryIcons={ones:&quot;1️⃣&quot;,twos:&quot;2️⃣&quot;,threes:&quot;3️⃣&quot;,fours:&quot;4️⃣&quot;,fives:&quot;5️⃣&quot;,sixes:&quot;6️⃣&quot;,bonus:&quot;⭐&quot;,pair:&quot;👥&quot;,twoPair:&quot;👥&quot;,full:&quot;🏠&quot;,three:&quot;3️⃣&quot;,four:&quot;4️⃣&quot;,smallStraight:&quot;📈&quot;,largeStraight:&quot;📊&quot;,yahtzee:&quot;🎲&quot;,chance:&quot;🍀&quot;};
+function cellHtml(p,c,active=false){
  if(Object.prototype.hasOwnProperty.call(p.scores,c.id)){
    const extra=(c.id!==&#x27;yahtzee&#x27;&amp;&amp;p.scores[c.id]!==null)?&#x27;&#x27;:&#x27;&#x27;;
    return `&lt;div class=&quot;score-cell locked&quot;&gt;${p.scores[c.id]}${extra}&lt;/div&gt;`;
  }
  if(rolls===0)return `&lt;div class=&quot;score-cell empty&quot;&gt;—&lt;/div&gt;`;
  const v=previewScore(p,c);
- const canChoose=rolls&gt;0;
+ const canChoose=rolls&gt;0 &amp;&amp; active;
  return `&lt;div class=&quot;score-cell ${canChoose?&#x27;preview&#x27;:&#x27;&#x27;}&quot; onclick=&quot;${canChoose?`chooseScore(&#x27;${c.id}&#x27;)`:&#x27;&#x27;}&quot;&gt;${v}&lt;/div&gt;`;
 }
 function renderTable(){
  const cols=gamePlayers.map(p=&gt;`&lt;th&gt;${esc(p.name)}&lt;div class=&quot;cat-sub&quot;&gt;${totalScore(p)} pt&lt;/div&gt;&lt;/th&gt;`).join(&#x27;&#x27;);
  let rows=&#x27;&#x27;;
  gameCategories.forEach(c=&gt;{
-  rows+=`&lt;tr&gt;&lt;td&gt;&lt;div class=&quot;cat-name&quot;&gt;${c.name}&lt;/div&gt;&lt;div class=&quot;cat-sub&quot;&gt;${c.desc}&lt;/div&gt;&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${cellHtml(p,c)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+  rows+=`&lt;tr&gt;&lt;td&gt;&lt;div class=&quot;cat-name&quot;&gt;&lt;span class=&quot;cat-icon&quot;&gt;${categoryIcons[c.id]||&quot;•&quot;}&lt;/span&gt;${c.name}&lt;/div&gt;&lt;/td&gt;${gamePlayers.map((p,i)=&gt;`&lt;td&gt;${cellHtml(p,c,i===turn)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
  });
  rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Totale attuale&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
  rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Yahtzee bonus&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td class=&quot;score-cell ${p.yahtzees?&#x27;yatzee-bonus&#x27;:&#x27;&#x27;}&quot;&gt;${p.yahtzees?&#x27;+ &#x27;+(Math.max(0,p.yahtzees-1)*100):&#x27;—&#x27;}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
@@ -451,11 +449,7 @@ async function confirmNewGame(){
  const r=await Swal.fire({title:&#x27;Nuova partita?&#x27;,text:&#x27;Il tabellone corrente verrà chiuso.&#x27;,icon:&#x27;warning&#x27;,showCancelButton:true,confirmButtonText:&#x27;Sì, nuova partita&#x27;,cancelButtonText:&#x27;Annulla&#x27;,background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;});
  if(r.isConfirmed)backToSetup();
 }
-async function confirmResetTurn(){
- if(rolls===0)return;
- const r=await Swal.fire({title:&#x27;Rifare il turno?&#x27;,text:&#x27;I lanci e i dadi conservati verranno azzerati.&#x27;,showCancelButton:true,confirmButtonText:&#x27;Sì, rifai&#x27;,cancelButtonText:&#x27;Annulla&#x27;,background:&#x27;#101e1b&#x27;,color:&#x27;#fff&#x27;});
- if(r.isConfirmed){rolls=0;held=[false,false,false,false,false];dice=[1,1,1,1,1];renderDice();renderTable();updateTurnUI()}
-}
+
 function backToSetup(){$(&#x27;game&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;gameOver&#x27;).classList.add(&#x27;hidden&#x27;);$(&#x27;setup&#x27;).classList.remove(&#x27;hidden&#x27;);$(&#x27;rollBtn&#x27;).classList.add(&#x27;hidden&#x27;);renderPlayers()}
 renderPlayers();
 &lt;/script&gt;
