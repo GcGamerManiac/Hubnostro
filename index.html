@@ -292,7 +292,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 const $=id=&gt;document.getElementById(id);
 let players=JSON.parse(localStorage.getItem(&#x27;yatzee_players_v1&#x27;)||&#x27;[]&#x27;);
 let gamePlayers=[],turn=0,rolls=0,dice=[1,1,1,1,1],held=[false,false,false,false,false],rolling=false;
-const categories=[
+const gameCategories=[
  {id:&#x27;ones&#x27;,name:&#x27;1&#x27;,desc:&#x27;Somma dei 1&#x27;,fn:d=&gt;sumN(d,1)},
  {id:&#x27;twos&#x27;,name:&#x27;2&#x27;,desc:&#x27;Somma dei 2&#x27;,fn:d=&gt;sumN(d,2)},
  {id:&#x27;threes&#x27;,name:&#x27;3&#x27;,desc:&#x27;Somma dei 3&#x27;,fn:d=&gt;sumN(d,3)},
@@ -319,7 +319,7 @@ function hasSmallStraight(d){const u=uniqueSorted(d);return [1,2,3,4].every(n=&g
 function hasLargeStraight(d){const u=uniqueSorted(d);return u.length===5&amp;&amp;((u[0]===1&amp;&amp;u[4]===5)||(u[0]===2&amp;&amp;u[4]===6))}
 function bonusScore(){const upper=gamePlayers[turn]?upperTotal(gamePlayers[turn]):0;return upper&gt;150?150:(upper&gt;63?50:0)}
 function upperTotal(p){return [&#x27;ones&#x27;,&#x27;twos&#x27;,&#x27;threes&#x27;,&#x27;fours&#x27;,&#x27;fives&#x27;,&#x27;sixes&#x27;].reduce((s,id)=&gt;s+(p.scores[id]||0),0)}
-function totalScore(p){return categories.reduce((s,c)=&gt;s+(p.scores[c.id]||0),0)}
+function totalScore(p){return gameCategories.reduce((s,c)=&gt;s+(p.scores[c.id]||0),0)}
 function yahtzeeCount(p){return p.yahtzees||0}
 function addPlayer(){
  const n=$(&#x27;playerName&#x27;).value.trim();
@@ -401,7 +401,7 @@ function cellHtml(p,c){
 function renderTable(){
  const cols=gamePlayers.map(p=&gt;`&lt;th&gt;${esc(p.name)}&lt;div class=&quot;cat-sub&quot;&gt;${totalScore(p)} pt&lt;/div&gt;&lt;/th&gt;`).join(&#x27;&#x27;);
  let rows=&#x27;&#x27;;
- categories.forEach(c=&gt;{
+ gameCategories.forEach(c=&gt;{
   rows+=`&lt;tr&gt;&lt;td&gt;&lt;div class=&quot;cat-name&quot;&gt;${c.name}&lt;/div&gt;&lt;div class=&quot;cat-sub&quot;&gt;${c.desc}&lt;/div&gt;&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${cellHtml(p,c)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
  });
  rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Totale attuale&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
@@ -411,7 +411,7 @@ function renderTable(){
 }
 async function chooseScore(id){
  if(rolling||rolls===0)return;
- const p=gamePlayers[turn],c=categories.find(x=&gt;x.id===id);
+ const p=gamePlayers[turn],c=gameCategories.find(x=&gt;x.id===id);
  if(!c||Object.prototype.hasOwnProperty.call(p.scores,id))return;
  const v=previewScore(p,c);
  const isY=new Set(dice).size===1;
@@ -601,7 +601,7 @@ syncTextarea();
 &lt;/html&gt;"></iframe>
 </section>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script><script>
 let currentApp = null;
 
 function openApp(id){
