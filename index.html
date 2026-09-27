@@ -475,8 +475,9 @@ async function chooseScore(id){
  if(!result.isConfirmed)return;
  p.scores[id]=v;
  if(isY)p.yahtzees++;
- const completed=categories.filter(x=&gt;x.id!==&#x27;bonus&#x27;).every(x=&gt;Object.prototype.hasOwnProperty.call(p.scores,x.id));
- if(completed){finishGame();return}
+ const scoreCategories=categories.filter(x=&gt;x.id!==&#x27;bonus&#x27;);
+ const allPlayersCompleted=gamePlayers.every(pl=&gt;scoreCategories.every(cat=&gt;Object.prototype.hasOwnProperty.call(pl.scores,cat.id)));
+ if(allPlayersCompleted){finishGame();return}
  turn=(turn+1)%gamePlayers.length;rolls=0;held=[false,false,false,false,false];dice=[1,1,1,1,1];
  renderDice();renderTable();updateTurnUI();
 }
