@@ -125,6 +125,7 @@ players=players.map(p=>({...p,id:p.id||crypto.randomUUID(),photo:p.photo||''}));
 &lt;meta charset=&quot;UTF-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,viewport-fit=cover&quot;&gt;
 &lt;title&gt;Yahtzee — Game Hub&lt;/title&gt;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/sweetalert2@11&quot;&gt;&lt;/script&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css&quot;&gt;
 &lt;style&gt;
 :root{
  --bg:#071412;--panel:#101e1b;--panel2:#142722;--line:#29453e;
@@ -214,6 +215,26 @@ body{padding-bottom:env(safe-area-inset-bottom)}
  .score-table th,.score-table td{padding:8px 6px}
  .float-roll{left:12px;right:12px;bottom:max(12px,calc(12px + env(safe-area-inset-bottom)));text-align:center}
 }
+
+/* === YAHTZEE: layout senza scroll === */
+html,body{width:100%;height:100%;min-height:100%;overflow:hidden}
+body{padding:0}
+.app{width:100%;height:100dvh;max-width:none;margin:0;padding:clamp(5px,1vh,12px) clamp(5px,1vw,14px);overflow:hidden;display:flex;flex-direction:column}
+.hero{padding:4px 4px 7px;flex:0 0 auto}.hero .dice{font-size:0}.hero .dice:after{content:&#x27;\f522&#x27;;font-family:&#x27;Font Awesome 6 Free&#x27;;font-weight:900;font-size:clamp(25px,4vh,42px)}.hero h1{font-size:clamp(21px,4vh,38px);margin:0}.hero p{margin:2px 0;font-size:clamp(10px,1.7vh,13px)}
+.card{padding:clamp(7px,1vh,14px);margin:clamp(4px,.7vh,9px) 0;border-radius:15px}
+#setup{overflow:hidden;flex:1;min-height:0}.setup-card{max-height:calc(100dvh - 95px);overflow:hidden}
+#game{padding-top:0;display:flex;flex-direction:column;gap:clamp(3px,.5vh,7px);height:100%;min-height:0}
+.game-top{margin:0;flex:0 0 auto}.turn-badge,.roll-badge{padding:6px 9px;font-size:clamp(11px,1.7vh,14px)}
+.score-wrap{overflow:hidden;flex:1 1 auto;min-height:0;border-radius:11px}.score-table{height:100%;table-layout:fixed}
+.score-table th,.score-table td{padding:clamp(2px,.45vh,6px) clamp(2px,.4vw,7px);height:clamp(22px,3.6vh,39px);line-height:1}
+.score-table th:first-child,.score-table td:first-child{width:18%}.score-table th:not(:first-child),.score-table td:not(:first-child){width:auto}
+.score-table thead th{font-size:clamp(9px,1.5vh,12px);height:clamp(27px,4.2vh,42px)}
+.cat-name{font-size:clamp(13px,2.7vh,23px);line-height:1}.cat-name i{display:inline-block;min-width:1em}.cat-sub{font-size:clamp(7px,1.15vh,10px);margin-top:2px}
+.score-cell{min-height:0;height:clamp(19px,3.1vh,34px);font-size:clamp(9px,1.55vh,13px);display:grid;place-items:center}.score-table .grand-row td{font-size:clamp(10px,1.7vh,14px);font-weight:950;height:clamp(25px,4vh,40px)}
+.game-info{padding:clamp(5px,.7vh,9px);margin:0;flex:0 0 auto}.game-info .dice-area{margin:0 0 clamp(3px,.5vh,6px);gap:clamp(4px,1vw,10px);grid-template-columns:repeat(5,minmax(0,1fr))}.die{width:100%;max-width:72px;justify-self:center;border-width:2px;border-radius:clamp(8px,1.2vh,14px);box-shadow:0 5px 12px rgba(0,0,0,.25)}.die-face{width:70%;height:70%;gap:2px}.dot{background:#15231f}.dice-hint{display:none}.status{min-height:0;font-size:clamp(9px,1.35vh,11px);margin:2px 0}.float-roll{padding:clamp(7px,1vh,11px);margin:3px 0 0;font-size:clamp(11px,1.7vh,14px);border-radius:10px;min-height:0}
+#gameOver{height:100%;display:flex;align-items:center;justify-content:center}
+@media (min-width:701px){.score-table th,.score-table td{padding:5px 8px}.game-info{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.game-info .dice-area{grid-column:1 / -1;max-width:600px;margin:auto;width:100%}.float-roll{width:100%;max-width:420px;margin:3px auto 0}.status{grid-column:1 / -1}}
+@media (max-height:700px){.hero{padding-bottom:3px}.card{padding:5px}.game-info{padding:4px}.score-table th,.score-table td{height:22px;padding:2px}.score-table thead th{height:25px}.cat-name{font-size:14px}.cat-sub{font-size:7px}.die{max-width:50px}.float-roll{padding:6px}.game-top{margin-bottom:2px}}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -288,22 +309,22 @@ try{
 }catch(e){console.warn(&#x27;Yahtzee: impossibile leggere i giocatori salvati&#x27;,e);players=[];}
 let gamePlayers=[],turn=0,rolls=0,dice=[1,1,1,1,1],held=[false,false,false,false,false],rolling=false;
 const categories=[
- {id:&#x27;ones&#x27;,name:&#x27;⚀&#x27;,desc:&#x27;Somma dei 1&#x27;,fn:d=&gt;sumN(d,1)},
- {id:&#x27;twos&#x27;,name:&#x27;⚁&#x27;,desc:&#x27;Somma dei 2&#x27;,fn:d=&gt;sumN(d,2)},
- {id:&#x27;threes&#x27;,name:&#x27;⚂&#x27;,desc:&#x27;Somma dei 3&#x27;,fn:d=&gt;sumN(d,3)},
- {id:&#x27;fours&#x27;,name:&#x27;⚃&#x27;,desc:&#x27;Somma dei 4&#x27;,fn:d=&gt;sumN(d,4)},
- {id:&#x27;fives&#x27;,name:&#x27;⚄&#x27;,desc:&#x27;Somma dei 5&#x27;,fn:d=&gt;sumN(d,5)},
- {id:&#x27;sixes&#x27;,name:&#x27;⚅&#x27;,desc:&#x27;Somma dei 6&#x27;,fn:d=&gt;sumN(d,6)},
- {id:&#x27;bonus&#x27;,name:&#x27;⭐&#x27;,desc:&#x27;&gt;63 = 50 • &gt;150 = 150&#x27;,fn:bonusScore},
- {id:&#x27;pair&#x27;,name:&#x27;👥&#x27;,desc:&#x27;10 + somma dadi restanti&#x27;,fn:pairScore},
- {id:&#x27;twoPair&#x27;,name:&#x27;👥&#x27;,desc:&#x27;20 + somma dadi restanti&#x27;,fn:twoPairScore},
- {id:&#x27;full&#x27;,name:&#x27;🏠&#x27;,desc:&#x27;3 uguali + 2 uguali&#x27;,fn:d=&gt;counts(d).includes(3)&amp;&amp;counts(d).includes(2)?25:0},
- {id:&#x27;three&#x27;,name:&#x27;3️⃣&#x27;,desc:&#x27;Somma di tutti i dadi&#x27;,fn:d=&gt;counts(d).some(x=&gt;x&gt;=3)?sum(d):0},
- {id:&#x27;four&#x27;,name:&#x27;4️⃣&#x27;,desc:&#x27;Somma di tutti i dadi&#x27;,fn:d=&gt;counts(d).some(x=&gt;x&gt;=4)?sum(d):0},
- {id:&#x27;smallStraight&#x27;,name:&#x27;📈&#x27;,desc:&#x27;4 consecutivi = 30&#x27;,fn:d=&gt;hasSmallStraight(d)?30:0},
- {id:&#x27;largeStraight&#x27;,name:&#x27;📊&#x27;,desc:&#x27;5 consecutivi = 40&#x27;,fn:d=&gt;hasLargeStraight(d)?40:0},
- {id:&#x27;yahtzee&#x27;,name:&#x27;🎲&#x27;,desc:&#x27;5 dadi uguali = 50&#x27;,fn:d=&gt;new Set(d).size===1?50:0},
- {id:&#x27;chance&#x27;,name:&#x27;🍀&#x27;,desc:&#x27;Somma di tutti i numeri&#x27;,fn:d=&gt;sum(d)}
+ {id:&#x27;ones&#x27;,name:&#x27;Uno&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-one&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sumN(d,1)},
+ {id:&#x27;twos&#x27;,name:&#x27;Due&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-two&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sumN(d,2)},
+ {id:&#x27;threes&#x27;,name:&#x27;Tre&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-three&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sumN(d,3)},
+ {id:&#x27;fours&#x27;,name:&#x27;Quattro&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-four&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sumN(d,4)},
+ {id:&#x27;fives&#x27;,name:&#x27;Cinque&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-five&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sumN(d,5)},
+ {id:&#x27;sixes&#x27;,name:&#x27;Sei&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-six&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sumN(d,6)},
+ {id:&#x27;bonus&#x27;,name:&#x27;Bonus&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-star&quot;&gt;&lt;/i&gt;&#x27;,fn:bonusScore},
+ {id:&#x27;pair&#x27;,name:&#x27;Coppia&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-user-group&quot;&gt;&lt;/i&gt;&#x27;,fn:pairScore},
+ {id:&#x27;twoPair&#x27;,name:&#x27;Doppia coppia&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-user-group&quot;&gt;&lt;/i&gt;&#x27;,fn:twoPairScore},
+ {id:&#x27;full&#x27;,name:&#x27;Full&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-house&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;counts(d).includes(3)&amp;&amp;counts(d).includes(2)?25:0},
+ {id:&#x27;three&#x27;,name:&#x27;Tris&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-three&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;counts(d).some(x=&gt;x&gt;=3)?sum(d):0},
+ {id:&#x27;four&#x27;,name:&#x27;Poker&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice-four&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;counts(d).some(x=&gt;x&gt;=4)?sum(d):0},
+ {id:&#x27;smallStraight&#x27;,name:&#x27;Scala piccola&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-chart-line&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;hasSmallStraight(d)?30:0},
+ {id:&#x27;largeStraight&#x27;,name:&#x27;Scala grande&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-chart-column&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;hasLargeStraight(d)?40:0},
+ {id:&#x27;yahtzee&#x27;,name:&#x27;Yahtzee&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-dice&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;new Set(d).size===1?50:0},
+ {id:&#x27;chance&#x27;,name:&#x27;Chance&#x27;,icon:&#x27;&lt;i class=&quot;fa-solid fa-clover&quot;&gt;&lt;/i&gt;&#x27;,fn:d=&gt;sum(d)}
 ];
 function pairScore(d){
  const f=freq(d);
@@ -403,7 +424,7 @@ function previewScore(p,c){
  if(c.id===&#x27;bonus&#x27;)return bonusScore();
  let v=c.fn(dice);
  // Yahtzee bonus: ogni Yahtzee oltre il primo aggiunge 100 alla categoria selezionata.
- if(new Set(dice).size===1 &amp;&amp; p.yahtzees&gt;0 &amp;&amp; c.id!==&#x27;yahtzee&#x27;)v+=100;
+ if(new Set(dice).size===1 &amp;&amp; p.yahtzees&gt;0)v+=100;
  return v;
 }
 function cellHtml(p,c,active){
@@ -418,12 +439,9 @@ function renderTable(){
  const cols=gamePlayers.map((p,i)=&gt;`&lt;th class=&quot;${i===turn?&#x27;active-col&#x27;:&#x27;&#x27;}&quot;&gt;${esc(p.name)}&lt;div class=&quot;cat-sub&quot;&gt;${totalScore(p)} pt&lt;/div&gt;&lt;/th&gt;`).join(&#x27;&#x27;);
  let rows=&#x27;&#x27;;
  categories.forEach(c=&gt;{
-  const iconName=c.name;
-  rows+=`&lt;tr&gt;&lt;td&gt;&lt;div class=&quot;cat-name&quot;&gt;${iconName}&lt;/div&gt;&lt;/td&gt;${gamePlayers.map((p,i)=&gt;`&lt;td class=&quot;${i===turn?&#x27;active-col&#x27;:&#x27;&#x27;}&quot;&gt;${cellHtml(p,c,i===turn)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+  rows+=`&lt;tr&gt;&lt;td&gt;&lt;div class=&quot;cat-name&quot; aria-label=&quot;${c.name}&quot;&gt;${c.icon}&lt;/div&gt;&lt;/td&gt;${gamePlayers.map((p,i)=&gt;`&lt;td class=&quot;${i===turn?&#x27;active-col&#x27;:&#x27;&#x27;}&quot;&gt;${cellHtml(p,c,i===turn)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
  });
- rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Totale attuale&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
- rows+=`&lt;tr class=&quot;total-row&quot;&gt;&lt;td&gt;Yahtzee bonus&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td class=&quot;score-cell ${p.yahtzees?&#x27;yatzee-bonus&#x27;:&#x27;&#x27;}&quot;&gt;${p.yahtzees?&#x27;+ &#x27;+(Math.max(0,p.yahtzees-1)*100):&#x27;—&#x27;}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
- rows+=`&lt;tr class=&quot;grand-row&quot;&gt;&lt;td&gt;TOTALE&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
+ rows+=`&lt;tr class=&quot;grand-row&quot;&gt;&lt;td&gt;Totale&lt;/td&gt;${gamePlayers.map(p=&gt;`&lt;td&gt;${totalScore(p)}&lt;/td&gt;`).join(&#x27;&#x27;)}&lt;/tr&gt;`;
  $(&#x27;scoreWrap&#x27;).innerHTML=`&lt;table class=&quot;score-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Categoria&lt;/th&gt;${cols}&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${rows}&lt;/tbody&gt;&lt;/table&gt;`;
 }
 async function chooseScore(id){
