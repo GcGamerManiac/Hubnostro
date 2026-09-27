@@ -124,7 +124,7 @@ players=players.map(p=>({...p,id:p.id||crypto.randomUUID(),photo:p.photo||''}));
 &lt;head&gt;
 &lt;meta charset=&quot;UTF-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,viewport-fit=cover&quot;&gt;
-&lt;title&gt;Yahtzee — Game Hub&lt;/title&gt;
+&lt;title&gt;Yahtzee — Game Hub&lt;/title&gt;&lt;script src=&quot;https://cdn.jsdelivr.net/npm/sweetalert2@11&quot;&gt;&lt;/script&gt;
 &lt;style&gt;
 :root{
  --bg:#071412;--panel:#101e1b;--panel2:#142722;--line:#29453e;
@@ -292,6 +292,18 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 const $=id=&gt;document.getElementById(id);
 let players=JSON.parse(localStorage.getItem(&#x27;yatzee_players_v1&#x27;)||&#x27;[]&#x27;);
 let gamePlayers=[],turn=0,rolls=0,dice=[1,1,1,1,1],held=[false,false,false,false,false],rolling=false;
+function pairScore(d){
+ const f=freq(d);
+ const pairs=Object.keys(f).filter(k=>f[k]>=2).map(Number);
+ if(!pairs.length)return 0;
+ return Math.max(...pairs)*2;
+}
+function twoPairScore(d){
+ const f=freq(d);
+ const pairs=Object.keys(f).filter(k=>f[k]>=2).map(Number).sort((a,b)=>b-a);
+ if(pairs.length<2)return 0;
+ return pairs[0]*2+pairs[1]*2;
+}
 const gameCategories=[
  {id:&#x27;ones&#x27;,name:&#x27;1&#x27;,desc:&#x27;Somma dei 1&#x27;,fn:d=&gt;sumN(d,1)},
  {id:&#x27;twos&#x27;,name:&#x27;2&#x27;,desc:&#x27;Somma dei 2&#x27;,fn:d=&gt;sumN(d,2)},
@@ -424,7 +436,7 @@ async function chooseScore(id){
  if(!result.isConfirmed)return;
  p.scores[id]=v;
  if(isY)p.yahtzees++;
- const completed=categories.every(x=&gt;Object.prototype.hasOwnProperty.call(p.scores,x.id));
+ const completed=gameCategories.every(x=&gt;Object.prototype.hasOwnProperty.call(p.scores,x.id));
  if(completed){finishGame();return}
  turn=(turn+1)%gamePlayers.length;rolls=0;held=[false,false,false,false,false];dice=[1,1,1,1,1];
  renderDice();renderTable();updateTurnUI();
